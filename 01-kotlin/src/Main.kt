@@ -1,4 +1,5 @@
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun main(args:Array<String>){
     print("Loool")
@@ -31,7 +32,60 @@ fun main(args:Array<String>){
 
     //calcularSueldo(1000.00, 14.00)
     //calcularSueldo(tasa=16.00, sueldo = 800.00)//parametros nombrados
+    val arregloConstante: Array<Int> = arrayOf(1,2,3)
+
+    val arregloDinamico: ArrayList<Int> = arrayListOf(30,31,20,29)
+    print(arregloDinamico)
+    arregloDinamico.add(12)
+    print(arregloDinamico)
+    arregloDinamico.remove(30)
+    print(arregloDinamico)
+
+    arregloDinamico
+            .forEach{
+                println("Valoracion de la iteracion " + it)
+            }
+
+    arregloDinamico
+            .forEach{valorIteracion: Int ->
+                println("Valor Iteracion:" + valorIteracion)
+
+            }
+
+    arregloDinamico
+            .forEach({valorIteracion: Int ->
+                println("Valor Iteracion:" + valorIteracion)
+
+            })
+
+    arregloDinamico
+            .forEachIndexed{ index: Int, it:Int ->
+                println("Valor de la iteración"+it)
+
+            }
+
+    //Operadores--MAP
+    val aux: List<Int> = arregloDinamico
+            .map {
+                val nuevoValor = it*-1
+                val otroValor = nuevoValor*2
+                return@map otroValor
+            }
+    println("Map "+aux)
+
+    //OPERADORES--Filter
+    val filtrados = arregloDinamico
+            .filter { it>25 }
+    println("Filter " +filtrados)
+
+    val filtrados2 = arregloDinamico
+            .filter {
+                val esMayor23 = it>23
+                return@filter esMayor23
+            }
 }
+
+
 
 fun calcularSueldo(
         sueldo : Double,//requeridos
