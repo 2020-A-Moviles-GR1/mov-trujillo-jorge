@@ -34,7 +34,7 @@ fun main(args:Array<String>){
     //calcularSueldo(tasa=16.00, sueldo = 800.00)//parametros nombrados
     val arregloConstante: Array<Int> = arrayOf(1,2,3)
 
-    val arregloDinamico: ArrayList<Int> = arrayListOf(30,31,20,29)
+    val arregloDinamico: ArrayList<Int> = arrayListOf(30,31,22,23,20)
     print(arregloDinamico)
     arregloDinamico.add(12)
     print(arregloDinamico)
@@ -83,6 +83,56 @@ fun main(args:Array<String>){
                 val esMayor23 = it>23
                 return@filter esMayor23
             }
+
+    //OPERADORES-- ALL Any       ==>clase 6
+    //ANY -> OR
+    //All -> AND
+    //ANDT -> True, todo lo demas falsor
+    // or-> todo es falso
+    //1) devolver una expresion (true or false)
+    //2) devuelve el booleano
+    val respuestaAny:Boolean = arregloDinamico
+            .any{
+                it>25
+            }
+    println("Any: "+ respuestaAny)
+
+    //OPERADOR all
+    val respuestaAll:Boolean = arregloDinamico
+            .all {
+                it>65
+            }
+    println("All: "+ respuestaAll)
+
+    //OPERADOR reduce
+    val valReduce = arregloDinamico
+            .reduce{acumulador,
+                    it -> acumulador + it
+            }
+    println("Reduce "+valReduce)
+
+    //OPERADOR fold
+    val foldVal = arregloDinamico
+            .fold(
+                    100,
+                    {acc,
+                    it -> acc - it
+            })
+    println("Fold: "+ foldVal)
+
+    val danoReducido = arregloDinamico
+            .map { it*0.8 }
+            .filter { it>18 }
+            .fold(100.00,
+                    { acc, it -> acc - it })
+    println("Dano reducido "+ danoReducido)
+
+    arregloDinamico
+            .find {
+                val llo = it>=30
+                print(llo)
+                return@find llo}
+
 }
 
 
@@ -102,4 +152,31 @@ fun calcularSueldo(
 
 fun imprimirMensaje():Unit{//Unit = void
     println("")
+}
+
+//CLASES ABSTRACTAS
+abstract class NumerosJava{
+    protected val numeroUno: Int
+    private val numeroDos: Int
+    constructor(uno:Int, dos:Int){
+        numeroDos = dos
+        numeroUno = uno
+    }
+}
+
+abstract class Numeros(
+        protected val numeroUno: Int,
+        protected val numeroDos: Int){
+    fun sumar():Int{
+        return this.numeroDos + this.numeroUno
+    }
+}
+
+class Sumar
+        uno:Int,
+        dos:Int
+):Numeros(uno, dos){
+    public fun sumar():Int{
+        return this.numeroDos + this.numeroUno
+    }
 }
