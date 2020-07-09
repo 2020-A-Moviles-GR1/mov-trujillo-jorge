@@ -5,6 +5,7 @@ package vista;
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+import clases.Datos;
 import clases.Files;
 
 import java.io.File;
@@ -70,7 +71,7 @@ public class Principal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
+        JPanel jPanel2 = new JPanel();
         jPanel2.setAlignmentY(Component.TOP_ALIGNMENT);
         jPanel2.setAlignmentX(Component.LEFT_ALIGNMENT);
         jButtonAdd = new javax.swing.JButton();
@@ -78,7 +79,7 @@ public class Principal extends javax.swing.JFrame {
         jButtonNew = new javax.swing.JButton();
         jButtonNew.setAlignmentX(Component.CENTER_ALIGNMENT);
         jButtonNew.setEnabled(false);
-        jScrollPane2 = new javax.swing.JScrollPane();
+        JScrollPane jScrollPane2 = new JScrollPane();
         jScrollPane2.setFont(new Font("Tahoma", Font.PLAIN, 14));
         jTable1 = new javax.swing.JTable();
         table = new javax.swing.JTable();
@@ -88,7 +89,7 @@ public class Principal extends javax.swing.JFrame {
         jButtonDelete.setEnabled(false);
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
-        jMenuItemCartas = new javax.swing.JMenuItem();
+        JMenuItem jMenuItemCartas = new JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         GridBagLayout gbl_jPanel2 = new GridBagLayout();
@@ -171,7 +172,7 @@ public class Principal extends javax.swing.JFrame {
         jPanel2.add(jLabelLevel, gbc_jLabelLevel);
         jComboBoxLvl = new javax.swing.JComboBox<>();
 
-        jComboBoxLvl.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
+        jComboBoxLvl.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12" }));
         GridBagConstraints gbc_jComboBoxLvl = new GridBagConstraints();
         gbc_jComboBoxLvl.fill = GridBagConstraints.HORIZONTAL;
         gbc_jComboBoxLvl.insets = new Insets(0, 0, 5, 0);
@@ -280,7 +281,7 @@ public class Principal extends javax.swing.JFrame {
             }
         });
 
-        jMenuItemNew = new JMenuItem("New Base");
+        JMenuItem jMenuItemNew = new JMenuItem("New Base");
         jMenuItemNew.addActionListener(this::jMenuNewAction);
         jMenu1.add(jMenuItemNew);
         jMenu1.add(jMenuItemCartas);
@@ -678,6 +679,10 @@ public class Principal extends javax.swing.JFrame {
     }
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        List<Object> data = (List<Object>) new Datos().strToJson();
+        jTextFldCardName.setText((String) data.get(0));
+        jTextFldId.setText(data.get(1)+"");
+
 
 
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -836,14 +841,10 @@ public class Principal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabelTcg;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItemCartas;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextFldPrecio;
     private javax.swing.JTextField jTextFldCardName;
     private javax.swing.JTextField jTextFldId;
-    private JMenuItem jMenuItemNew;
     private final JPanel panel = new JPanel();
     private JCheckBox chckbxDisponible;
     private final JPanel panel_1 = new JPanel();

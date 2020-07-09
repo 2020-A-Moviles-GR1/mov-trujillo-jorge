@@ -3,6 +3,7 @@ package clases
 import java.io.*
 import java.time.LocalDate
 
+
 class Files (){
 
     var rutaCartas: String = ""
@@ -14,7 +15,7 @@ class Files (){
         if(this.cartas.containsKey(name)){
             return -1
         }else{
-            var carta = Carta(name, id,level,tcg,precio)
+            val carta = Carta(name, id,level,tcg,precio)
             this.cartas.put(carta.nombre,carta)
             return 0
         }
@@ -23,21 +24,21 @@ class Files (){
         if(this.expansiones.containsKey(name)){
             return -1
         }else{
-            var expansion = Expansion(name, id,fecha,precio, tcg)
+            val expansion = Expansion(name, id,fecha,precio, tcg)
             this.expansiones.put(expansion.nombre,expansion)
             return 0
         }
     }
 
     fun writeFileCards(datos:MutableMap<String,Carta>){
-        var file = this.rutaCartas
+        val file = this.rutaCartas
         ObjectOutputStream(FileOutputStream(file)).use{
             it -> it.writeObject(datos)
         }
     }
 
     fun writeFileExpansions(datos:MutableMap<String,Expansion>){
-        var file = this.rutaExpansiones
+        val file = this.rutaExpansiones
         ObjectOutputStream(FileOutputStream(file)).use{
             it -> it.writeObject(datos)
         }
@@ -83,7 +84,7 @@ class Files (){
 
     fun readCard(name: String): List<*>{
         if(cartas.containsKey(name)){
-            var card = cartas.getValue(name)
+            val card = cartas.getValue(name)
             return listOf(card.nombre, card.id, card.level, card.tcg, card.precio)
         }else{
             return listOf("")
@@ -92,7 +93,7 @@ class Files (){
 
     fun readExp(name: String): List<*>{
         if(expansiones.containsKey(name)){
-            var card = expansiones.getValue(name)
+            val card = expansiones.getValue(name)
             return listOf(card.nombre, card.id, card.releaseDate, card.tcg, card.precio,card.cartas)
         }else{
             return listOf("")
@@ -118,7 +119,7 @@ class Files (){
     }
 
     fun updateCard(oldName:String,newName:String,id:String, level:Int, tcg:Boolean, precio:Double){
-        var oldCarta = cartas.get(oldName)
+        val oldCarta = cartas.get(oldName)
         if (oldCarta != null) {
             if (oldName!=newName){
                 oldCarta.nombre=newName
@@ -141,7 +142,7 @@ class Files (){
     fun updateExpansion(oldName: String, newName: String, id: String,
                         releaseDate:LocalDate,precio: Double, tcg: Boolean,
                         listCartas:MutableList<String>){
-        var oldExpansion = expansiones.get(oldName)
+        val oldExpansion = expansiones.get(oldName)
         if (oldExpansion != null) {
             if (oldName!=newName){
                 oldExpansion.nombre=newName
@@ -150,7 +151,7 @@ class Files (){
                 oldExpansion.tcg= tcg
                 oldExpansion.precio = precio
                 oldExpansion.cartas = listCartas
-                var newExpansion= oldExpansion
+                val newExpansion= oldExpansion
                 expansiones.remove(oldName)
                 expansiones.put(newName,newExpansion)
             }else{
