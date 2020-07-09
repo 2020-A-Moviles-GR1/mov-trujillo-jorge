@@ -208,6 +208,7 @@ public class Principal extends javax.swing.JFrame {
 
         jButtonNew.setText("New");
         jButtonNew.addActionListener(this::jButtonNewActionPerformed);
+        jButtonSaveEx.addActionListener(this::jButtonSaveExActionPerformed);
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
                 new Object [][] {
@@ -289,6 +290,7 @@ public class Principal extends javax.swing.JFrame {
         jMenuItemEx.addActionListener(this::jMenuLoadExpAction);
         jMenu1.add(jMenuItemEx);
         jButtonAddEx.addActionListener(this::jButtonAddExActionPerformed);
+        jButtonNew_1.addActionListener(this::jButtonNew_1ActionPerformed);
 
         setJMenuBar(jMenuBar1);
         GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -304,13 +306,14 @@ public class Principal extends javax.swing.JFrame {
                                                 .addPreferredGap(ComponentPlacement.UNRELATED)
                                                 .addComponent(jButtonNew)
                                                 .addGap(28)
-                                                .addComponent(jButtonDelete, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(jButtonDelete, GroupLayout.PREFERRED_SIZE, 25, GroupLayout.PREFERRED_SIZE)
+                                                .addPreferredGap(ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                                                .addComponent(btnAddCrdToExp))
                                         .addGroup(groupLayout.createSequentialGroup()
-                                                .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
+                                                .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
                                                         .addComponent(jScrollPane2, Alignment.LEADING, 0, 0, Short.MAX_VALUE)
-                                                        .addComponent(jPanel2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 245, Short.MAX_VALUE))
-                                                .addPreferredGap(ComponentPlacement.RELATED)
-                                                .addComponent(btnAddCrdToExp)))
+                                                        .addComponent(jPanel2, Alignment.LEADING, GroupLayout.PREFERRED_SIZE, 245, GroupLayout.PREFERRED_SIZE))
+                                                .addGap(73)))
                                 .addPreferredGap(ComponentPlacement.RELATED)
                                 .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
                                         .addGroup(groupLayout.createSequentialGroup()
@@ -329,26 +332,21 @@ public class Principal extends javax.swing.JFrame {
                                                 .addGap(18)))
                                 .addPreferredGap(ComponentPlacement.RELATED)
                                 .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-                                        .addComponent(btnNewButton)
+                                        .addComponent(btnDltCrdFrmExp)
                                         .addComponent(jScrollPane2_1_1, GroupLayout.PREFERRED_SIZE, 284, GroupLayout.PREFERRED_SIZE))
                                 .addContainerGap())
         );
-        btnDeleteExp.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                jButtonDeleteExpansionActionPerformed(e);
-            }
-        });
+        btnDeleteExp.setEnabled(false);
         groupLayout.setVerticalGroup(
                 groupLayout.createParallelGroup(Alignment.LEADING)
                         .addGroup(groupLayout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
                                         .addGroup(groupLayout.createSequentialGroup()
-                                                .addComponent(btnNewButton)
+                                                .addComponent(btnDltCrdFrmExp)
                                                 .addPreferredGap(ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                                 .addComponent(jScrollPane2_1_1, GroupLayout.PREFERRED_SIZE, 365, GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(ComponentPlacement.RELATED))
-                                        .addComponent(btnAddCrdToExp)
                                         .addGroup(groupLayout.createSequentialGroup()
                                                 .addGroup(groupLayout.createParallelGroup(Alignment.TRAILING, false)
                                                         .addComponent(panel_1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -363,17 +361,24 @@ public class Principal extends javax.swing.JFrame {
                                                                                 .addComponent(jButtonNew))
                                                                         .addComponent(jButtonDelete))
                                                                 .addPreferredGap(ComponentPlacement.RELATED)
-                                                                .addComponent(jScrollPane2, GroupLayout.PREFERRED_SIZE, 196, GroupLayout.PREFERRED_SIZE))
+                                                                .addComponent(jScrollPane2, GroupLayout.DEFAULT_SIZE, 200, Short.MAX_VALUE)
+                                                                .addPreferredGap(ComponentPlacement.RELATED))
                                                         .addGroup(groupLayout.createSequentialGroup()
                                                                 .addGroup(groupLayout.createParallelGroup(Alignment.BASELINE)
                                                                         .addComponent(jButtonAddEx)
                                                                         .addComponent(jButtonSaveEx)
                                                                         .addComponent(jButtonNew_1)
-                                                                        .addComponent(btnDeleteExp))
+                                                                        .addComponent(btnDeleteExp)
+                                                                        .addComponent(btnAddCrdToExp))
                                                                 .addPreferredGap(ComponentPlacement.RELATED)
                                                                 .addComponent(jScrollPane2_1, 0, 0, Short.MAX_VALUE)))))
                                 .addGap(10))
         );
+        btnDeleteExp.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                jButtonDeleteExpansionActionPerformed(e);
+            }
+        });
 
         table_1 = new JTable();
         table_1.setShowVerticalLines(false);
@@ -382,7 +387,7 @@ public class Principal extends javax.swing.JFrame {
         table.setShowVerticalLines(false);
         table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        jScrollPane2_1.setColumnHeaderView(table);
+        jScrollPane2_1.setViewportView(table);
         jTextFldPrecio = new javax.swing.JTextField();
 
         btnAddCrdToExp.addActionListener(this::jBtnAddCrdToExpActionPerformed);
@@ -497,7 +502,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonAddActionPerformed
 
     private void jButtonAddExActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerforme
-        LocalDate date = LocalDate.of(jDatePick.getModel().getYear(),jDatePick.getModel().getMonth(),jDatePick.getModel().getDay());
+        LocalDate date = LocalDate.of(jDatePick.getModel().getYear(),jDatePick.getModel().getMonth()+1,jDatePick.getModel().getDay());
         if(fl.addExpansion(jTxttFldNameEx.getText(),
                 jTxtFldIDEx.getText(),
                 date,
@@ -570,7 +575,7 @@ public class Principal extends javax.swing.JFrame {
             jTxtFldPrice.setText(lista.get(4)+"");
             table_1.setModel(tableModel((List) lista.get(5)));
             oldExpansionName= (String) table.getValueAt(table.getSelectedRow(),0);
-            desactivar(new Object[]{jButtonSave,jButtonNew,jButtonDelete},true);
+            desactivar(new Object[]{jButtonSaveEx,jButtonNew_1,btnDeleteExp,btnDltCrdFrmExp},true);
             jButtonAddEx.setEnabled(false);
         }
 
@@ -578,7 +583,6 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void jButtonSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerfors
-
         fl.updateCard(oldCardName,jTextFldCardName.getText(),
                 jTextFldId.getText(),
                 Integer.parseInt((String)jComboBoxLvl.getSelectedItem()),
@@ -588,17 +592,42 @@ public class Principal extends javax.swing.JFrame {
         fl.writeFileCards(fl.getCartas());
         JOptionPane.showMessageDialog(this,"Carta actualizada con éxito");
         jTable1.setModel(tableModel(fl.getCardsKeys()));
+        oldCardName=jTextFldCardName.getText();
+
+    }//GEN-LAST:event_jButtonSaveActionPerformed
+
+    private void jButtonSaveExActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonSaveActionPerfors
+        LocalDate date = LocalDate.of(jDatePick.getModel().getYear(),jDatePick.getModel().getMonth(),jDatePick.getModel().getDay());
+        fl.updateExpansion(oldExpansionName,jTxttFldNameEx.getText(),
+                jTxtFldIDEx.getText(),
+                date,
+                Double.parseDouble(jTextFldPrecio.getText()),
+                        chckbxDisponible.isSelected(),
+                (List<String>) fl.readExp(oldCardName).get(5)
+        );
+        fl.writeFileExpansions(fl.getExpansiones());
+        JOptionPane.showMessageDialog(this,"Expansion actualizada con éxito");
+        table.setModel(tableModel(fl.getExpKeys()));
+        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5)));
+        oldExpansionName= jTxttFldNameEx.getText();
 
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
     private void jButtonNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
-
         jTextFldCardName.setText("");
         jTextFldId.setText("");
         jComboBoxLvl.setSelectedIndex(0);
         jTextFldPrecio.setText("");
         desactivar(new Object[]{jButtonDelete,jButtonNew, jButtonSave},false);
         jButtonAdd.setEnabled(true);
+    }//GEN-LAST:event_jButtonNewActionPerformed
+
+    private void jButtonNew_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNewActionPerformed
+        jTxttFldNameEx.setText("");
+        jTxtFldIDEx.setText("");
+        jTxtFldPrice.setText("");
+        desactivar(new Object[]{btnDeleteExp,btnDltCrdFrmExp, jButtonNew_1, jButtonSaveEx},false);
+        jButtonAddEx.setEnabled(true);
     }//GEN-LAST:event_jButtonNewActionPerformed
 
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
@@ -610,6 +639,7 @@ public class Principal extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this,"Eliminada");
         jTable1.setModel(tableModel(fl.getCardsKeys()));
         table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5)));
+        jButtonNewActionPerformed(evt);
 
 
     }//GEN-LAST:event_jButtonDeleteActionPerformed
@@ -621,6 +651,7 @@ public class Principal extends javax.swing.JFrame {
         fl.writeFileExpansions(fl.getExpansiones());
         JOptionPane.showMessageDialog(this,"Eliminada");
         table.setModel(tableModel(fl.getExpKeys()));
+        jButtonNew_1ActionPerformed(evt);
 
     }
 
@@ -630,7 +661,7 @@ public class Principal extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jBtnAddCrdToExpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerforme
-        LocalDate date = LocalDate.of(jDatePick.getModel().getYear(),jDatePick.getModel().getMonth(),jDatePick.getModel().getDay());
+        LocalDate date = LocalDate.of(jDatePick.getModel().getYear(),jDatePick.getModel().getMonth()+1,jDatePick.getModel().getDay());
         ArrayList<String> li = (ArrayList<String>) fl.readExp(oldExpansionName).get(5);
         if (li.contains(oldCardName)){
             JOptionPane.showMessageDialog(this,"La carta ya esta agregada");
@@ -792,7 +823,7 @@ public class Principal extends javax.swing.JFrame {
     private JTable table;
     private final JScrollPane jScrollPane2_1_1 = new JScrollPane();
     private JMenuItem jMenuItemEx;
-    private final JButton btnNewButton = new JButton("New button");
+    private final JButton btnDltCrdFrmExp = new JButton("Quitar Carta");
     private JTable table_1;
     private final JButton btnDeleteExp = new JButton("Borrar Exp");
 }
