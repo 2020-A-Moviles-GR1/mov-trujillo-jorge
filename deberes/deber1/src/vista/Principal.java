@@ -596,9 +596,11 @@ public class Principal extends javax.swing.JFrame {
                 chckbxDisponible.isSelected(),
                 Double.parseDouble(jTextFldPrecio.getText())
         );
+        fl.updateCardForAll(oldCardName,jTextFldCardName.getText());
         fl.writeFileCards(fl.getCartas());
         JOptionPane.showMessageDialog(this,"Carta actualizada con éxito");
         jTable1.setModel(tableModel(fl.getCardsKeys(),"Expansiones"));
+        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en "+oldExpansionName));
         oldCardName=jTextFldCardName.getText();
 
     }//GEN-LAST:event_jButtonSaveActionPerformed
@@ -695,7 +697,7 @@ public class Principal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Añadida con éxito");
             fl.readFileExpansiones(fl.getRutaExpansiones());
             table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
-            table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en"+oldExpansionName));
+            table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en "+oldExpansionName));
 
         }
     }//GEN-LAST:event_jButton1ActionPerformed

@@ -170,4 +170,13 @@ class Files (){
             it.value.precio,it.value.tcg,it.value.cartas)
         } }
     }
+
+    fun updateCardForAll(oldName: String,newName: String){
+        expansiones.map { it-> if (it.value.cartas.contains(oldName)){
+            it.value.cartas.remove(oldName)
+            it.value.cartas.add(newName)
+            updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
+                    it.value.precio,it.value.tcg,it.value.cartas)
+        } }
+    }
 }
