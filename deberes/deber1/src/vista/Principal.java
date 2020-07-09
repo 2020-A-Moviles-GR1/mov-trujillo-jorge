@@ -291,6 +291,7 @@ public class Principal extends javax.swing.JFrame {
         jMenu1.add(jMenuItemEx);
         jButtonAddEx.addActionListener(this::jButtonAddExActionPerformed);
         jButtonNew_1.addActionListener(this::jButtonNew_1ActionPerformed);
+        btnDltCrdFrmExp.addActionListener(this::jBtnDltCrdFromExpActionPerformed);
 
         setJMenuBar(jMenuBar1);
         GroupLayout groupLayout = new GroupLayout(getContentPane());
@@ -494,7 +495,7 @@ public class Principal extends javax.swing.JFrame {
                 Double.parseDouble(jTextFldPrecio.getText()))==0){
             fl.writeFileCards(fl.getCartas());
             JOptionPane.showMessageDialog(this,"Añadida con éxito");
-            jTable1.setModel(tableModel(fl.getCardsKeys()));
+            jTable1.setModel(tableModel(fl.getCardsKeys(),"Expansiones"));
         }else{
             JOptionPane.showMessageDialog(this,"La carta ya está registrada");
         }
@@ -510,7 +511,7 @@ public class Principal extends javax.swing.JFrame {
                 chckbxNewCheckBox.isSelected())==0){
             fl.writeFileExpansions(fl.getExpansiones());
             JOptionPane.showMessageDialog(this,"Añadida con éxito");
-            table.setModel(tableModel(fl.getExpKeys()));
+            table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
         }else{
             JOptionPane.showMessageDialog(this,"La carta ya está registrada");
         }
@@ -520,18 +521,19 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         fl.setRutaCartas(this.loadChooser(this, ".cards"));
         fl.readFile(fl.getRutaCartas());
-        jTable1.setModel(tableModel(fl.getCardsKeys()));
+        jTable1.setModel(tableModel(fl.getCardsKeys(),"Expansiones"));
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuNewAction(ActionEvent evt) {
-        jTable1.setModel(tableModel(fl.getCardsKeys()));
+
+
     }
 
     private void jMenuLoadExpAction(ActionEvent evt) {
         fl.setRutaExpansiones(this.loadChooser(this,".expansiones"));
         fl.readFileExpansiones(fl.getRutaExpansiones());
-        table.setModel(tableModel(fl.getExpKeys()));
+        table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
     }
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
@@ -573,8 +575,8 @@ public class Principal extends javax.swing.JFrame {
             jTxtFldIDEx.setText((String) lista.get(1));
             chckbxNewCheckBox.setSelected((Boolean) lista.get(3));
             jTxtFldPrice.setText(lista.get(4)+"");
-            table_1.setModel(tableModel((List) lista.get(5)));
             oldExpansionName= (String) table.getValueAt(table.getSelectedRow(),0);
+            table_1.setModel(tableModel((List) lista.get(5),"Cartas en "+oldExpansionName));
             desactivar(new Object[]{jButtonSaveEx,jButtonNew_1,btnDeleteExp,btnDltCrdFrmExp},true);
             jButtonAddEx.setEnabled(false);
         }
@@ -591,7 +593,7 @@ public class Principal extends javax.swing.JFrame {
         );
         fl.writeFileCards(fl.getCartas());
         JOptionPane.showMessageDialog(this,"Carta actualizada con éxito");
-        jTable1.setModel(tableModel(fl.getCardsKeys()));
+        jTable1.setModel(tableModel(fl.getCardsKeys(),"Expansiones"));
         oldCardName=jTextFldCardName.getText();
 
     }//GEN-LAST:event_jButtonSaveActionPerformed
@@ -607,9 +609,9 @@ public class Principal extends javax.swing.JFrame {
         );
         fl.writeFileExpansions(fl.getExpansiones());
         JOptionPane.showMessageDialog(this,"Expansion actualizada con éxito");
-        table.setModel(tableModel(fl.getExpKeys()));
-        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5)));
         oldExpansionName= jTxttFldNameEx.getText();
+        table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
+        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en "+oldExpansionName));
 
     }//GEN-LAST:event_jButtonSaveActionPerformed
 
@@ -630,6 +632,19 @@ public class Principal extends javax.swing.JFrame {
         jButtonAddEx.setEnabled(true);
     }//GEN-LAST:event_jButtonNewActionPerformed
 
+    private void jBtnDltCrdFromExpActionPerformed (java.awt.event.ActionEvent evt){
+        ArrayList<String> oldExp = (ArrayList<String>) fl.readExp(oldExpansionName).get(5);
+        oldExp.remove(table_1.getValueAt(table_1.getSelectedRow(),0));
+        fl.updateExpansion(oldExpansionName,oldExpansionName,
+                (String) fl.readExp(oldExpansionName).get(1),
+                (LocalDate) fl.readExp(oldExpansionName).get(2),
+                (Double) fl.readExp(oldExpansionName).get(4),
+                (Boolean) fl.readExp(oldExpansionName).get(3),
+                oldExp);
+        fl.writeFileExpansions(fl.getExpansiones());
+        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en "+oldExpansionName));
+    }
+
     private void jButtonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDeleteActionPerformed
         fl.deleteCardFromAll((String) jTable1.getValueAt(jTable1.getSelectedRow(),0));
         fl.deleteCard((String) jTable1.getValueAt(jTable1.getSelectedRow(),0));
@@ -637,8 +652,8 @@ public class Principal extends javax.swing.JFrame {
         fl.writeFileCards(fl.getCartas());
         fl.writeFileExpansions(fl.getExpansiones());
         JOptionPane.showMessageDialog(this,"Eliminada");
-        jTable1.setModel(tableModel(fl.getCardsKeys()));
-        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5)));
+        jTable1.setModel(tableModel(fl.getCardsKeys(),"Expansiones"));
+        table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en "+oldExpansionName));
         jButtonNewActionPerformed(evt);
 
 
@@ -650,7 +665,7 @@ public class Principal extends javax.swing.JFrame {
         jButtonNewActionPerformed(evt);
         fl.writeFileExpansions(fl.getExpansiones());
         JOptionPane.showMessageDialog(this,"Eliminada");
-        table.setModel(tableModel(fl.getExpKeys()));
+        table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
         jButtonNew_1ActionPerformed(evt);
 
     }
@@ -674,8 +689,8 @@ public class Principal extends javax.swing.JFrame {
             fl.writeFileExpansions(fl.getExpansiones());
             JOptionPane.showMessageDialog(this,"Añadida con éxito");
             fl.readFileExpansiones(fl.getRutaExpansiones());
-            table.setModel(tableModel(fl.getExpKeys()));
-            table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5)));
+            table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
+            table_1.setModel(tableModel((List) fl.readExp(oldExpansionName).get(5),"Cartas en"+oldExpansionName));
 
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -740,14 +755,14 @@ public class Principal extends javax.swing.JFrame {
         }
     }
 
-    private TableModel tableModel(List listaDeKeys){
+    private TableModel tableModel(List listaDeKeys,String nameColumn){
         DefaultTableModel tableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
         };
-        tableModel.addColumn("Cartas", listaDeKeys.toArray());
+        tableModel.addColumn(nameColumn, listaDeKeys.toArray());
         return tableModel;
     }
 
