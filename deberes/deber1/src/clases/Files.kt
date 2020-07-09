@@ -44,23 +44,33 @@ class Files (){
     }
 
     fun readFile(name:String){
-        ObjectInputStream(FileInputStream(name)).use { it ->
-            val datos = it.readObject()
-            when (datos) {
-                is MutableMap<*, *> -> cartas = datos as MutableMap<String, Carta>
-                else -> println("Fallo al deserializar")
+        try {
+            ObjectInputStream(FileInputStream(name)).use { it ->
+                val datos = it.readObject()
+                when (datos) {
+                    is MutableMap<*, *> -> cartas = datos as MutableMap<String, Carta>
+                    else -> println("Fallo al deserializar")
+                }
             }
+        }catch (e:EOFException){
+
         }
+
     }
 
     fun readFileExpansiones(name:String){
-        ObjectInputStream(FileInputStream(name)).use { it ->
-            val datos = it.readObject()
-            when (datos) {
-                is MutableMap<*, *> -> expansiones = datos as MutableMap<String, Expansion>
-                else -> println("Fallo al deserializar")
+        try {
+            ObjectInputStream(FileInputStream(name)).use { it ->
+                val datos = it.readObject()
+                when (datos) {
+                    is MutableMap<*, *> -> expansiones = datos as MutableMap<String, Expansion>
+                    else -> println("Fallo al deserializar")
+                }
             }
+        }catch (e:EOFException){
+
         }
+
     }
 
     fun getCardsKeys(): List<String>{

@@ -8,6 +8,7 @@ package vista;
 import clases.Files;
 
 import java.io.File;
+import java.io.FileWriter;
 import java.time.*;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -521,12 +522,16 @@ public class Principal extends javax.swing.JFrame {
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         fl.setRutaCartas(this.loadChooser(this, ".cards"));
         fl.readFile(fl.getRutaCartas());
-        jTable1.setModel(tableModel(fl.getCardsKeys(),"Expansiones"));
+        jTable1.setModel(tableModel(fl.getCardsKeys(),"Cartas"));
 
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuNewAction(ActionEvent evt) {
-
+        saveChooser(this);
+        fl.readFile(fl.getRutaCartas());
+        fl.readFileExpansiones(fl.getRutaExpansiones());
+        jTable1.setModel(tableModel(fl.getCardsKeys(),"Cartas"));
+        table.setModel(tableModel(fl.getExpKeys(),"Expansiones"));
 
     }
 
@@ -766,6 +771,26 @@ public class Principal extends javax.swing.JFrame {
         return tableModel;
     }
 
+    public void saveChooser(Component parent) {
+        String ruta = "";
+        JFileChooser jFileCh = new JFileChooser("user.home");
+        jFileCh.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        int userSelection = jFileCh.showSaveDialog(parent);
+        if (userSelection == JFileChooser.APPROVE_OPTION) {
+            try {
+                ruta = jFileCh.getSelectedFile().getAbsolutePath();
+                System.out.println(ruta);
+                FileWriter fw = new FileWriter(ruta+"\\datos.cards");
+                FileWriter fw2 = new FileWriter(ruta+"\\datos.expansiones");
+                fl.setRutaCartas(ruta+"\\datos.cards");
+                fl.setRutaExpansiones(ruta+"\\datos.expansiones");
+                fw.close();
+                fw2.close();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
     public String loadChooser(Component parent, String tipo) {
         String ruta = "";
         JFileChooser jFileCh = new JFileChooser();
