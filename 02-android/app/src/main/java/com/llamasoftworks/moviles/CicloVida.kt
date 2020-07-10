@@ -12,7 +12,7 @@ class CicloVida : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ciclo_vida)
-        Log.i("Activity", "OnCreate")
+        Log.i("sctivity", "OnCreate")
         btn_anadir
             .setOnClickListener{
                 sumarUnValor()
@@ -27,31 +27,50 @@ class CicloVida : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        Log.i("Activity","onStart")
+        Log.i("activity","onStart")
     }
 
     override fun onResume() {
         super.onResume()
-        Log.i("Activity","onResume")
+        Log.i("activity","onResume")
     }
 
     override fun onPause() {
         super.onPause()
-        Log.i("Activity","onPause")
+        Log.i("activity","onPause")
     }
 
     override fun onStop() {
         super.onStop()
-        Log.i("Activity","onStop")
+        Log.i("activity","onStop")
     }
 
     override fun onRestart() {
         super.onRestart()
-        Log.i("Activity","onRestart")
+        Log.i("activity","onRestart")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.i("Activity","onDestroy")
+        Log.i("activity","onDestroy")
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        Log.i("activity", "onSaveInstanceState")
+        outState?.run {
+            putInt("numeroActualGuardado", numeroActual)
+        }
+        super.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        Log.i("activity", "onRestoreInstanceState")
+        val valorRecuperado = savedInstanceState
+            ?.getInt("numeroActualGuardado")
+            if (valorRecuperado != null){
+                this.numeroActual = valorRecuperado
+                tv_numero.text = this.numeroActual.toString()
+            }
     }
 }

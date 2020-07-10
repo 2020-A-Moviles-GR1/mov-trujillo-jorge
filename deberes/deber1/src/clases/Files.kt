@@ -56,7 +56,6 @@ class Files (){
         }catch (e:EOFException){
 
         }
-
     }
 
     fun readFileExpansiones(name:String){
@@ -71,7 +70,6 @@ class Files (){
         }catch (e:EOFException){
 
         }
-
     }
 
     fun getCardsKeys(): List<String>{
@@ -140,8 +138,8 @@ class Files (){
     }
 
     fun updateExpansion(oldName: String, newName: String, id: String,
-                        releaseDate:LocalDate,precio: Double, tcg: Boolean,
-                        listCartas:MutableList<String>){
+                        releaseDate:LocalDate, precio: Double, tcg: Boolean,
+                        listCartas: MutableList<*>){
         val oldExpansion = expansiones.get(oldName)
         if (oldExpansion != null) {
             if (oldName!=newName){
@@ -150,7 +148,7 @@ class Files (){
                 oldExpansion.releaseDate= releaseDate
                 oldExpansion.tcg= tcg
                 oldExpansion.precio = precio
-                oldExpansion.cartas = listCartas
+                oldExpansion.cartas = listCartas as MutableList<String>
                 val newExpansion= oldExpansion
                 expansiones.remove(oldName)
                 expansiones.put(newName,newExpansion)
@@ -159,7 +157,7 @@ class Files (){
                 oldExpansion.releaseDate= releaseDate
                 oldExpansion.tcg= tcg
                 oldExpansion.precio = precio
-                oldExpansion.cartas = listCartas
+                oldExpansion.cartas = listCartas as MutableList<String>
             }
         }
     }
