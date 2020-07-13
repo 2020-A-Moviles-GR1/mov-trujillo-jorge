@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -15,6 +16,19 @@ class MainActivity : AppCompatActivity() {
         btn_ciclo_vida.setOnClickListener{ boton->
             irCicloDeVida()
         }
+
+        btn_list_view
+            .setOnClickListener { boton ->
+                irListView()
+            }
+    }
+
+    fun irListView(){
+        val intentExplicito = Intent(
+            this,
+            ListView::class.java
+        )
+        startActivity(intentExplicito)
     }
 
     fun irCicloDeVida(){
