@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity() {
     fun irListView(){
         val intentExplicito = Intent(
             this,
-            ListView::class.java
+            ListViewActivity::class.java
         )
         startActivity(intentExplicito)
     }
