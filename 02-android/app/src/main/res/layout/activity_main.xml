@@ -35,8 +35,17 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="36dp"
         android:text="Int Respuesta"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_ciclo_vida"
         app:layout_constraintStart_toEndOf="@+id/btn_ciclo_vida"
-        app:layout_constraintTop_toTopOf="@+id/btn_ciclo_vida"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="@+id/btn_ciclo_vida" />
+
+    <Button
+        android:id="@+id/btn_intent_implicito"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="I. Implicito"
+        app:layout_constraintEnd_toEndOf="@+id/btn_int_respuesta"
+        app:layout_constraintHorizontal_bias="0.475"
+        app:layout_constraintStart_toStartOf="@+id/btn_int_respuesta"
+        app:layout_constraintTop_toBottomOf="@+id/btn_int_respuesta" />
 </androidx.constraintlayout.widget.ConstraintLayout>
