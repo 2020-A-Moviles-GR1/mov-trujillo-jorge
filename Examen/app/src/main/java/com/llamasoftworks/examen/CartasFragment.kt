@@ -39,7 +39,6 @@ class CartasFragment : Fragment() {
             android.R.layout.simple_list_item_1, // Nombre Layout
             Companion.cartas.keys.toList()// Lista
         )
-
         lv_cartas.adapter = adaptador
         adaptador.notifyDataSetChanged()
         lv_cartas

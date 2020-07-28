@@ -1,12 +1,15 @@
 package com.llamasoftworks.examen
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import kotlinx.android.synthetic.main.activity_carta.*
 import kotlinx.android.synthetic.main.activity_expansion.*
 import java.time.LocalDate
 import java.util.*
@@ -16,7 +19,10 @@ class ExpansionActivity : AppCompatActivity() {
     var date: LocalDate = LocalDate.now()
     var picker: DatePickerDialog? = null
     var oldName = ""
+    var posicion = -1
     var listaCartasOnExp =   mutableListOf<String>()
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expansion)
@@ -39,7 +45,33 @@ class ExpansionActivity : AppCompatActivity() {
             deleteExpansion(oldName)
             finish()
         }
+        fab_add_card_to_Exp.setOnClickListener {
+            irAddCardToExpActivity()
+        }
+        val adaptador = ArrayAdapter(
+            this, // Contexto
+            android.R.layout.simple_list_item_1, // Nombre Layout
+            listaCartasOnExp.toList()// Lista
+        )
+        lv_cards_on_expansion.adapter = adaptador
+        lv_cards_on_expansion
+            .onItemClickListener = AdapterView.OnItemClickListener {
+                parent, view, position, id ->
+            deleteCard(adaptador,position)}
+
     }
+
+    override fun onRestart() {
+        super.onRestart()
+        val adaptador = ArrayAdapter(
+            this, // Contexto
+            android.R.layout.simple_list_item_1, // Nombre Layout
+            listaCartasOnExp.toList()// Lista
+        )
+        lv_cards_on_expansion.adapter = adaptador
+        adaptador.notifyDataSetChanged()
+    }
+
 
     override fun onStart() {
         super.onStart()
@@ -47,13 +79,48 @@ class ExpansionActivity : AppCompatActivity() {
         if (numeroEncontrado != -1){
             val datos = Companion.readExpansion(numeroEncontrado)
             oldName = datos[0].toString()
+            posicion = numeroEncontrado
             loadExpansionData(datos)
+            btn_guardar_cartaEx.setVisibility(View.GONE);
         }else{
             fab_deleteEx.hide()
+            fab_add_card_to_Exp.hide()
             btn_save_changesEx.setVisibility(View.GONE);
         }
+        val adaptador = ArrayAdapter(
+            this, // Contexto
+            android.R.layout.simple_list_item_1, // Nombre Layout
+            listaCartasOnExp.toList()// Lista
+        )
+        lv_cards_on_expansion.adapter = adaptador
+        adaptador.notifyDataSetChanged()
     }
 
+    fun deleteCard(adaptador: ArrayAdapter<String>, index:Int){
+        listaCartasOnExp.removeAt(index)
+        adaptador.notifyDataSetChanged()
+        recreate()
+    }
+
+    override fun onActivityResult(requestCode: Int, //NUmero que enviamos
+                                  resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        when(resultCode){
+            Activity.RESULT_OK->{
+                when(requestCode){
+                    304 ->{
+                        if(data!=null){
+                            val posisiondos = data.getIntExtra("indice", -1)
+                            listaCartasOnExp.add(Companion.cartas.keys.toList()[posisiondos])
+                        }
+                    }
+                }
+            }
+            Activity.RESULT_CANCELED->{
+
+            }
+        }
+    }
 
     fun guardarExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
         val nuevaExpansion = Expansion(nombre, id, releaseDate, precio, tcg)
@@ -67,14 +134,6 @@ class ExpansionActivity : AppCompatActivity() {
         editText5Ex.setText((datos[3].toString()))
         switch1Ex.isChecked = datos[4] as Boolean
         listaCartasOnExp = datos[5] as MutableList<String>
-        val adaptador = ArrayAdapter(
-            this, // Contexto
-            android.R.layout.simple_list_item_1, // Nombre Layout
-            listaCartasOnExp.toList()// Lista
-        )
-
-        lv_cards_on_expansion.adapter = adaptador
-        adaptador.notifyDataSetChanged()
     }
 
     fun updateExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
@@ -99,6 +158,15 @@ class ExpansionActivity : AppCompatActivity() {
             day
         )
         picker!!.show()
+    }
+
+    fun irAddCardToExpActivity(){
+        val intentExplicito = Intent(
+            this,
+            AddCardToExpActivity::class.java
+        )
+        intentExplicito.putExtra("posicion", posicion)
+        startActivityForResult(intentExplicito,304)
     }
 
 }

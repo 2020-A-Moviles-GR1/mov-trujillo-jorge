@@ -7,8 +7,6 @@ class Companion {
         var cartas: MutableMap<String, Carta> = mutableMapOf()
         var expansiones: MutableMap<String, Expansion> = mutableMapOf("Lol" to Expansion("Lol", "12", LocalDate.now(),12.0,false))
 
-
-
         fun anadirCarta(carta:Carta){
             cartas.put(carta.nombre, carta)
         }
@@ -18,8 +16,8 @@ class Companion {
         }
 
         fun readCard(posicion:Int):List<*>{
-            val name = cartas.keys.toList()[posicion]
-            val card = cartas.get(name)
+            val nombre = cartas.keys.toList()[posicion]
+            val card = cartas.get(nombre)
             return listOf(card!!.nombre,card!!.id,card!!.level,card!!.tcg,card!!.precio)
         }
 
@@ -91,6 +89,23 @@ class Companion {
             }else{
                 return -1
             }
+        }
+
+        fun deleteCardFromAll(nombreCarta: String){
+            expansiones.map { it-> if (it.value.cartas.contains(nombreCarta)){
+                it.value.cartas.remove(nombreCarta)
+                updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
+                    it.value.tcg,it.value.precio,it.value.cartas)
+            } }
+        }
+
+        fun updateCardForAll(oldName: String,newName: String){
+            expansiones.map { it-> if (it.value.cartas.contains(oldName)){
+                it.value.cartas.remove(oldName)
+                it.value.cartas.add(newName)
+                updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
+                    it.value.tcg,it.value.precio,it.value.cartas)
+            } }
         }
     }
 }

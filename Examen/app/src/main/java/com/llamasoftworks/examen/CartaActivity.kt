@@ -41,10 +41,12 @@ class CartaActivity : AppCompatActivity() {
             updateCarta(etEngName.text.toString(), etId.text.toString(),
                 spin.getItemAtPosition(spin.getSelectedItemPosition()).toString().toInt() ,
                 switch1.isChecked,editText5.text.toString().toDouble())
+            Companion.updateCardForAll(oldName,etEngName.text.toString())
             finish()
         }
         fab_delete.setOnClickListener {
             deleteCard(oldName)
+            Companion.deleteCardFromAll(oldName)
             finish()
         }
     }
@@ -56,9 +58,12 @@ class CartaActivity : AppCompatActivity() {
             val datos = Companion.readCard(numeroEncontrado)
             oldName = datos[0].toString()
             loadCardData(datos)
+            button.setVisibility(View.GONE);
+            btn_guardar_carta.setVisibility(View.GONE);
         }else{
             fab_delete.hide()
             btn_save_changes.setVisibility(View.GONE);
+
         }
     }
 
@@ -84,11 +89,4 @@ class CartaActivity : AppCompatActivity() {
         editText5.setText((datos[4].toString()))
     }
 
-    fun irCartaActivity(){
-        val intentExplicito = Intent(
-            this,
-            MainActivity::class.java
-        )
-        startActivity(intentExplicito)
-    }
 }
