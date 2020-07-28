@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_carta.*
 import kotlinx.android.synthetic.main.activity_expansion.*
 import java.time.LocalDate
 import java.util.*

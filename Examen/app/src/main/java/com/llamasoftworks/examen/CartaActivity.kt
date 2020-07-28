@@ -1,19 +1,10 @@
 package com.llamasoftworks.examen
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.util.AttributeSet
 import android.view.View
-import android.widget.Adapter
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.core.view.isVisible
-import androidx.fragment.app.FragmentActivity
 import kotlinx.android.synthetic.main.activity_carta.*
-
 
 class CartaActivity : AppCompatActivity() {
 
@@ -58,7 +49,6 @@ class CartaActivity : AppCompatActivity() {
             val datos = Companion.readCard(numeroEncontrado)
             oldName = datos[0].toString()
             loadCardData(datos)
-            button.setVisibility(View.GONE);
             btn_guardar_carta.setVisibility(View.GONE);
         }else{
             fab_delete.hide()
