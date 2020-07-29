@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".IntentEnviaParametros">
+
+    <Button
+        android:id="@+id/buttonbtn_devolver_respuesta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Devolver Respuesta"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_resp_aceptar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="44dp"
+        android:text="Aceptar"
+        app:layout_constraintEnd_toEndOf="@+id/buttonbtn_devolver_respuesta"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="@+id/buttonbtn_devolver_respuesta"
+        app:layout_constraintTop_toBottomOf="@+id/buttonbtn_devolver_respuesta" />
+
+    <Button
+        android:id="@+id/btn_resp_cancelar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="36dp"
+        android:text="Cancelar"
+        app:layout_constraintEnd_toEndOf="@+id/btn_resp_aceptar"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_resp_aceptar"
+        app:layout_constraintTop_toBottomOf="@+id/btn_resp_aceptar" />
+</androidx.constraintlayout.widget.ConstraintLayout>
