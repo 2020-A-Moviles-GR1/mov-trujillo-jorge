@@ -20,6 +20,7 @@ class ExpansionActivity : AppCompatActivity() {
     var oldName = ""
     var posicion = -1
     var listaCartasOnExp =   mutableListOf<String>()
+    var data = LocalDate.now()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,6 +134,7 @@ class ExpansionActivity : AppCompatActivity() {
         editText5Ex.setText((datos[3].toString()))
         switch1Ex.isChecked = datos[4] as Boolean
         listaCartasOnExp = datos[5] as MutableList<String>
+        date = datos[2] as LocalDate
     }
 
     fun updateExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
@@ -156,6 +158,7 @@ class ExpansionActivity : AppCompatActivity() {
             month,
             day
         )
+        picker!!.updateDate(date.year,date.monthValue, date.dayOfMonth)
         picker!!.show()
     }
 
@@ -167,7 +170,6 @@ class ExpansionActivity : AppCompatActivity() {
         intentExplicito.putExtra("posicion", posicion)
         startActivityForResult(intentExplicito,304)
     }
-
 }
 
 

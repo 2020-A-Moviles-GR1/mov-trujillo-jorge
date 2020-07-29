@@ -19,5 +19,4 @@ class Expansion(nombre:String, id:String, releaseDate:LocalDate, precio:Double,
             return 0;
         }
     }
-
 }
