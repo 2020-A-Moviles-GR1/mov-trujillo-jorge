@@ -158,7 +158,7 @@ class ExpansionActivity : AppCompatActivity() {
             month,
             day
         )
-        picker!!.updateDate(date.year,date.monthValue, date.dayOfMonth)
+        picker!!.updateDate(date.year,date.monthValue-1, date.dayOfMonth)
         picker!!.show()
     }
 

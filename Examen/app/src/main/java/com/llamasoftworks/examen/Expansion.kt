@@ -11,12 +11,4 @@ class Expansion(nombre:String, id:String, releaseDate:LocalDate, precio:Double,
     var tcg:Boolean = tcg
     var cartas:MutableList<String> = mutableListOf()
 
-    fun addCard(nombreCarta:String):Int{
-        if (cartas.contains(nombreCarta)){
-            return -1
-        }else{
-            cartas.add(nombreCarta);
-            return 0;
-        }
-    }
 }
