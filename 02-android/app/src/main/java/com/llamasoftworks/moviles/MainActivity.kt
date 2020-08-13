@@ -8,6 +8,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -102,6 +103,19 @@ class MainActivity : AppCompatActivity() {
             IntentEnviaParametros::class.java
         )
         intentExplicito.putExtra("numero", 2)
+        val jorge = Usuario(
+            "Jorge",
+            25,
+            Date(),
+            1.0
+        )
+        val yoshi = Mascota(
+            "Yoshi",
+            jorge
+        )
+        val arregloMascota= arrayListOf<Mascota>(yoshi)
+        intentExplicito.putExtra("yoshi",yoshi)
+        intentExplicito.putExtra("arregloMascota",arregloMascota)
         startActivity(intentExplicito)
     }
 

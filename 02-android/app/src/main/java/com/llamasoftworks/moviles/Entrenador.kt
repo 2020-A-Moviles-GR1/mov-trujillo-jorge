@@ -8,5 +8,4 @@ class Entrenador(
     override fun toString(): String {
         return "${this.nombre} ${this.apellido}"
     }
-    
 }
