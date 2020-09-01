@@ -11,23 +11,28 @@ module.exports = {
     nombre:{
       type: 'string',
       required: true,
+      columnName: 'card_name',
       unique: true
     },
     id:{
       type: 'string',
       required: true,
+      columnName: 'card_id',
       unique: true
     },
-    level:{
+    nivel:{
       type: 'number',
+      columnName: 'card_level',
       isInteger:true,
       isIn:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
     precio:{
-      type:'number'
+      type:'number',
+      columnName: 'amount'
     },
     tcg:{
       type:'boolean',
+      columnName: 'tcg',
       required:true
     }
   },
