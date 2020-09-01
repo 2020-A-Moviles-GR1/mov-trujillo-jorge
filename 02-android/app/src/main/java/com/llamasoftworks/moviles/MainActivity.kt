@@ -8,6 +8,7 @@ import android.provider.ContactsContract
 import android.util.Log
 import android.widget.ListView
 import kotlinx.android.synthetic.main.activity_main.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -38,6 +39,9 @@ class MainActivity : AppCompatActivity() {
             .setOnClickListener {
                 enviarIntentConRespuestaPropia()
             }
+        btn_http.setOnClickListener {
+            abrirActividadHttp()
+        }
     }
 
     fun enviarIntentConRespuestaPropia(){
@@ -102,6 +106,19 @@ class MainActivity : AppCompatActivity() {
             IntentEnviaParametros::class.java
         )
         intentExplicito.putExtra("numero", 2)
+        val jorge = Usuario(
+            "Jorge",
+            25,
+            Date(),
+            1.0
+        )
+        val yoshi = Mascota(
+            "Yoshi",
+            jorge
+        )
+        val arregloMascota= arrayListOf<Mascota>(yoshi)
+        intentExplicito.putExtra("yoshi",yoshi)
+        intentExplicito.putExtra("arregloMascota",arregloMascota)
         startActivity(intentExplicito)
     }
 
@@ -109,6 +126,14 @@ class MainActivity : AppCompatActivity() {
         val intentExplicito = Intent(
             this,
             ListViewActivity::class.java
+        )
+        startActivity(intentExplicito)
+    }
+
+    fun abrirActividadHttp(){
+        val intentExplicito = Intent(
+            this,
+            HttpActivity::class.java
         )
         startActivity(intentExplicito)
     }

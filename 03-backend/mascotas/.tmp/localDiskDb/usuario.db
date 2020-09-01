@@ -1,0 +1,9 @@
+{"$$indexCreated":{"fieldName":"id","unique":true,"sparse":false}}
+{"$$indexCreated":{"fieldName":"usr_cedula","unique":true,"sparse":false}}
+{"createdAt":1597868300461,"updatedAt":1597868300461,"id":1,"nombre":"Ion","correo":"jorge.trujillo@epn.edu.ec","estadoCivil":"Soltero","password":"SuperSeg12","usr_cedula":"0401864954","_id":1}
+{"createdAt":1597889368887,"updatedAt":1597889368887,"id":3,"nombre":"Naoto Mizobuchi","correo":"naoto.mizo@example.com","estadoCivil":"Soltero","password":"SuperSeg0","usr_cedula":"1111111111","_id":3}
+{"createdAt":1597926768687,"updatedAt":1597926768687,"id":4,"nombre":"Alejandro","correo":"alejandro@example.com","estadoCivil":"Casado","password":"Alejandro3","usr_cedula":"0400851273","_id":4}
+{"createdAt":1597926826677,"updatedAt":1597926826677,"id":5,"nombre":"Lans","correo":"lans@example.com","estadoCivil":"Divorciado","password":"LansPoke3","usr_cedula":"1129481838","_id":5}
+{"createdAt":1597926880281,"updatedAt":1597926880281,"id":6,"nombre":"McFarlane","correo":"mcfarlane@example.com","estadoCivil":"Viudo","password":"McFarlane22","usr_cedula":"0493818394","_id":6}
+{"createdAt":1597926952552,"updatedAt":1597926952552,"id":7,"nombre":"Alana","correo":"alana@example.com","estadoCivil":"Union Libre","password":"AlanaPoke22","usr_cedula":"1234641824","_id":7}
+{"nombre":"Ain","correo":"ain@example.com","estadoCivil":"Casado","password":"SuperSeg22","createdAt":1598879042409,"updatedAt":1598879042409,"id":12,"usr_cedula":"0401864275","_id":12}
