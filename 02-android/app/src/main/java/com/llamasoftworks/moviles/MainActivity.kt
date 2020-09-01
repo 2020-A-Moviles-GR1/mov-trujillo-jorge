@@ -39,6 +39,9 @@ class MainActivity : AppCompatActivity() {
             .setOnClickListener {
                 enviarIntentConRespuestaPropia()
             }
+        btn_http.setOnClickListener {
+            abrirActividadHttp()
+        }
     }
 
     fun enviarIntentConRespuestaPropia(){
@@ -123,6 +126,14 @@ class MainActivity : AppCompatActivity() {
         val intentExplicito = Intent(
             this,
             ListViewActivity::class.java
+        )
+        startActivity(intentExplicito)
+    }
+
+    fun abrirActividadHttp(){
+        val intentExplicito = Intent(
+            this,
+            HttpActivity::class.java
         )
         startActivity(intentExplicito)
     }
