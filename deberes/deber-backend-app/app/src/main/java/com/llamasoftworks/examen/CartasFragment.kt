@@ -12,6 +12,7 @@ import kotlinx.android.synthetic.main.fragment_cartas.*
 
 class CartasFragment : Fragment() {
 
+    val httpData:HttpData = HttpData()
     var cardNum = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +23,7 @@ class CartasFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         return inflater.inflate(R.layout.fragment_cartas, container, false)
     }
 
@@ -34,10 +36,11 @@ class CartasFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
+        httpData.readCardsNames()
         val adaptador = ArrayAdapter(
             activity, // Contexto
             android.R.layout.simple_list_item_1, // Nombre Layout
-            Companion.cartas.keys.toList()// Lista
+            httpData.cartasList// Lista
         )
         lv_cartas.adapter = adaptador
         adaptador.notifyDataSetChanged()
