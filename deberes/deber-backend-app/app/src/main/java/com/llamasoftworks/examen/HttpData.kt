@@ -2,6 +2,7 @@ package com.llamasoftworks.examen
 
 import android.util.Log
 import com.beust.klaxon.Klaxon
+import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -81,5 +82,21 @@ class HttpData {
                 Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
+    }
+
+    fun deleteCard (idCarta:String){
+        val url = urlPrincipal + "/carta/"+idCarta
+        url.httpDelete()
+            .responseString{
+                    req, res, result ->
+                when(result){
+                    is Result.Failure ->{
+                        val error = result.getException()
+                    }
+                    is Result.Success -> {
+                        val usuarioString = result.get()
+                    }
+                }
+            }
     }
 }

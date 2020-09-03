@@ -2,18 +2,16 @@ package com.llamasoftworks.examen
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_carta.*
 import java.lang.ref.WeakReference
-import java.text.FieldPosition
 
 class CartaActivity : AppCompatActivity() {
 
     companion object{
-        var oldName = ""
+        var oldId = ""
     }
     val httpData:HttpData = HttpData()
     val position = -1
@@ -44,7 +42,7 @@ class CartaActivity : AppCompatActivity() {
             finish()
         }
         fab_delete.setOnClickListener {
-            deleteCard(oldName)
+            deleteCard(oldId)
             //Companion.deleteCardFromAll(oldName)
             finish()
         }
@@ -75,15 +73,7 @@ class CartaActivity : AppCompatActivity() {
     }
 
     fun deleteCard(nombre: String){
-        //Companion.deleteCard(nombre)
-    }
-
-    fun loadCardData(datos:List<*>){
-        etEngName.setText((datos[0].toString()))
-        etId.setText((datos[1].toString()))
-        spin.setSelection(datos[2] as Int)
-        switch1.isChecked = datos[3] as Boolean
-        editText5.setText((datos[4].toString()))
+        httpData.deleteCard(nombre)
     }
 
     private class MyTask(context: CartaActivity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
@@ -106,7 +96,7 @@ class CartaActivity : AppCompatActivity() {
             spinLevel!!.setSelection(aVoid[2] as Int)
             switch1!!.isChecked = aVoid[3] as Boolean
             editText5!!.setText(aVoid[4].toString())
-            oldName = aVoid[0].toString()
+            oldId = aVoid[1].toString()
         }
     }
 
