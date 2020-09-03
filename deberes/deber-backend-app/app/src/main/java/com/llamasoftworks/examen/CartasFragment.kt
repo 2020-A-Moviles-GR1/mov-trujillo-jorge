@@ -38,9 +38,11 @@ class CartasFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         MyTask(activity).execute()
-        lv_cartas.adapter = ArrayAdapter(
+        var adapter = ArrayAdapter(
             activity, android.R.layout.simple_list_item_1,HttpData.cartasList
         )
+        lv_cartas.adapter = adapter
+        adapter.notifyDataSetChanged()
         lv_cartas
             .onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->

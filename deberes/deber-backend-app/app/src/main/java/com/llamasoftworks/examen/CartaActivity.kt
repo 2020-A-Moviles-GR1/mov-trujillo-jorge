@@ -35,10 +35,9 @@ class CartaActivity : AppCompatActivity() {
             finish()
         }
         btn_save_changes.setOnClickListener {
-            updateCarta(etEngName.text.toString(), etId.text.toString(),
+            httpData.updateCard(etEngName.text.toString(), etId.text.toString(),
                 spin.getItemAtPosition(spin.getSelectedItemPosition()).toString().toInt() ,
                 switch1.isChecked,editText5.text.toString().toDouble())
-            //Companion.updateCardForAll(oldName,etEngName.text.toString())
             finish()
         }
         fab_delete.setOnClickListener {
@@ -65,11 +64,6 @@ class CartaActivity : AppCompatActivity() {
     fun guardarCarta(nombre:String, id:String, level:Int,tcg:Boolean,precio:Double){
         val nuevaCarta = Carta(nombre,id,level,tcg,precio)
         httpData.createCard(nuevaCarta)
-    }
-
-    fun updateCarta(nombre:String, id:String, level:Int,tcg:Boolean,precio:Double){
-        //Companion.updateCard(oldName,nombre,id,level,tcg,precio)
-        
     }
 
     fun deleteCard(nombre: String){

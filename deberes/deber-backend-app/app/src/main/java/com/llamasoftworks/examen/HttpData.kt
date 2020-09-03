@@ -5,6 +5,7 @@ import com.beust.klaxon.Klaxon
 import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.result.Result
 
 
@@ -87,6 +88,29 @@ class HttpData {
     fun deleteCard (idCarta:String){
         val url = urlPrincipal + "/carta/"+idCarta
         url.httpDelete()
+            .responseString{
+                    req, res, result ->
+                when(result){
+                    is Result.Failure ->{
+                        val error = result.getException()
+                    }
+                    is Result.Success -> {
+                        val usuarioString = result.get()
+                    }
+                }
+            }
+    }
+
+    fun updateCard(newName:String, oldId:String,level:Int, tcg:Boolean, precio:Double){
+        val url = urlPrincipal + "/carta/"+oldId
+        val parametrosCarta = listOf(
+            "nombre" to newName,
+            "id" to oldId,
+            "level" to level,
+            "tcg" to tcg,
+            "precio" to precio
+        )
+        url.httpPut(parametrosCarta)
             .responseString{
                     req, res, result ->
                 when(result){
