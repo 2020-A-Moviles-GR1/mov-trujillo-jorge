@@ -12,7 +12,9 @@ import java.text.FieldPosition
 
 class CartaActivity : AppCompatActivity() {
 
-    var oldName = ""
+    companion object{
+        var oldName = ""
+    }
     val httpData:HttpData = HttpData()
     val position = -1
     val attributos = arrayOf(
@@ -38,12 +40,12 @@ class CartaActivity : AppCompatActivity() {
             updateCarta(etEngName.text.toString(), etId.text.toString(),
                 spin.getItemAtPosition(spin.getSelectedItemPosition()).toString().toInt() ,
                 switch1.isChecked,editText5.text.toString().toDouble())
-            Companion.updateCardForAll(oldName,etEngName.text.toString())
+            //Companion.updateCardForAll(oldName,etEngName.text.toString())
             finish()
         }
         fab_delete.setOnClickListener {
             deleteCard(oldName)
-            Companion.deleteCardFromAll(oldName)
+            //Companion.deleteCardFromAll(oldName)
             finish()
         }
     }
@@ -51,12 +53,9 @@ class CartaActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
-        MyTask(this,numeroEncontrado).execute()
+
         if (numeroEncontrado != -1){
-            val datos =httpData.readCard(numeroEncontrado)
-            Log.i("http-klaxon","Error: ${datos}")
-            oldName = datos[0].toString()
-            loadCardData(datos)
+            MyTask(this,numeroEncontrado).execute()
             btn_guardar_carta.setVisibility(View.GONE);
         }else{
             fab_delete.hide()
@@ -71,12 +70,12 @@ class CartaActivity : AppCompatActivity() {
     }
 
     fun updateCarta(nombre:String, id:String, level:Int,tcg:Boolean,precio:Double){
-        Companion.updateCard(oldName,nombre,id,level,tcg,precio)
+        //Companion.updateCard(oldName,nombre,id,level,tcg,precio)
         
     }
 
     fun deleteCard(nombre: String){
-        Companion.deleteCard(nombre)
+        //Companion.deleteCard(nombre)
     }
 
     fun loadCardData(datos:List<*>){
@@ -107,7 +106,7 @@ class CartaActivity : AppCompatActivity() {
             spinLevel!!.setSelection(aVoid[2] as Int)
             switch1!!.isChecked = aVoid[3] as Boolean
             editText5!!.setText(aVoid[4].toString())
-
+            oldName = aVoid[0].toString()
         }
     }
 

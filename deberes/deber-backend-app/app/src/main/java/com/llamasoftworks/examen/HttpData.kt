@@ -1,6 +1,5 @@
 package com.llamasoftworks.examen
 
-import android.os.StrictMode
 import android.util.Log
 import com.beust.klaxon.Klaxon
 import com.github.kittinunf.fuel.httpGet
@@ -13,6 +12,7 @@ class HttpData {
     companion object{
         var cartasList = mutableListOf<String>()
     }
+    var urlPrincipal = "http://192.168.1.3:1337"
     fun readCard(posicion:Int):List<*>{
         val nombre = cartasList[posicion]
         var listaDeDatosCarta = mutableListOf("","",0,true,0.01)
@@ -36,11 +36,6 @@ class HttpData {
         }
         return listaDeDatosCarta
     }
-
-
-
-
-    var urlPrincipal = "http://192.168.1.3:1337"
 
     fun createCard(carta:Carta){
         val url = urlPrincipal + "/carta"
@@ -86,6 +81,5 @@ class HttpData {
                 Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
-
     }
 }
