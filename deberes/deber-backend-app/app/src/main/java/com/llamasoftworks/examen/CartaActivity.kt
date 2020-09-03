@@ -1,16 +1,20 @@
 package com.llamasoftworks.examen
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_carta.*
+import java.lang.ref.WeakReference
+import java.text.FieldPosition
 
 class CartaActivity : AppCompatActivity() {
 
     var oldName = ""
     val httpData:HttpData = HttpData()
+    val position = -1
     val attributos = arrayOf(
         "0","1","2","3","4","5","6","7","8","9","10","11","12"
     )
@@ -47,6 +51,7 @@ class CartaActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
+        MyTask(this,numeroEncontrado).execute()
         if (numeroEncontrado != -1){
             val datos =httpData.readCard(numeroEncontrado)
             Log.i("http-klaxon","Error: ${datos}")
@@ -80,6 +85,30 @@ class CartaActivity : AppCompatActivity() {
         spin.setSelection(datos[2] as Int)
         switch1.isChecked = datos[3] as Boolean
         editText5.setText((datos[4].toString()))
+    }
+
+    private class MyTask(context: CartaActivity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
+        val activityReference: WeakReference<CartaActivity?> = WeakReference(context)
+        val posicion = position
+        val etEngName = activityReference.get()?.findViewById<EditText>(R.id.etEngName)
+        val etId = activityReference.get()?.findViewById<EditText>(R.id.etId)
+        val spinLevel = activityReference.get()?.findViewById<Spinner>(R.id.spin)
+        val switch1 = activityReference.get()?.findViewById<Switch>(R.id.switch1)
+        val editText5 = activityReference.get()?.findViewById<EditText>(R.id.editText5)
+        override fun doInBackground(vararg p0:Void): List<*>{
+            val httpData = HttpData()
+
+            return httpData.readCard(posicion)
+        }
+
+        override fun onPostExecute(aVoid: List<*>) {
+            etEngName!!.setText(aVoid[0].toString())
+            etId!!.setText(aVoid[1].toString())
+            spinLevel!!.setSelection(aVoid[2] as Int)
+            switch1!!.isChecked = aVoid[3] as Boolean
+            editText5!!.setText(aVoid[4].toString())
+
+        }
     }
 
 }
