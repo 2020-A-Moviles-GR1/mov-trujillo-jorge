@@ -54,10 +54,10 @@ class CartaActivity : AppCompatActivity() {
         if (numeroEncontrado != -1){
             MyTask(this,numeroEncontrado).execute()
             btn_guardar_carta.setVisibility(View.GONE);
+            etId.keyListener = null
         }else{
             fab_delete.hide()
             btn_save_changes.setVisibility(View.GONE);
-
         }
     }
 

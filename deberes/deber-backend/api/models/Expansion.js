@@ -1,5 +1,5 @@
 /**
- * Carta.js
+ * Expansion.js
  *
  * @description :: A model definition represents a database table/collection.
  * @docs        :: https://sailsjs.com/docs/concepts/models-and-orm/models
@@ -18,10 +18,9 @@ module.exports = {
       required: true,
       unique: true
     },
-    level:{
+    releaseDate:{
       type: 'number',
       isInteger:true,
-      isIn:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
     },
     precio:{
       type:'number'
@@ -30,9 +29,9 @@ module.exports = {
       type:'boolean',
       required:true
     },
-    expansion: {
-      model:'expansion',
-      required: false
+    cartas:{//one to many
+      collection:'carta',//referencia al modelo
+      via:'expansion'//nombre foreign key
     }
   },
 

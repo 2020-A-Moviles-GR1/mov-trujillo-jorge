@@ -1,14 +1,17 @@
 package com.llamasoftworks.examen
 
 import java.time.LocalDate
+import java.util.*
 
-class Expansion(nombre:String, id:String, releaseDate:LocalDate, precio:Double,
-                tcg:Boolean){
-    var nombre:String = nombre
-    var id:String = id
-    var releaseDate:LocalDate = releaseDate
-    var precio:Double = precio
-    var tcg:Boolean = tcg
+class Expansion@JvmOverloads constructor (
+    var nombre:String,
+    var id:String,
+    @KlaxonDate var releaseDate:LocalDate,
+    var precio:Double,
+    var tcg:Boolean){
+
     var cartas:MutableList<String> = mutableListOf()
 
 }
+@Target(AnnotationTarget.FIELD)
+annotation class KlaxonDate

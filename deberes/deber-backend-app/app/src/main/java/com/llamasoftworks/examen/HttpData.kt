@@ -8,11 +8,10 @@ import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.result.Result
 
-
 class HttpData {
-
     companion object{
         var cartasList = mutableListOf<String>()
+        var expansionesList = mutableListOf<String>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     fun readCard(posicion:Int):List<*>{
@@ -73,7 +72,7 @@ class HttpData {
                 if (cartas != null){
                     HttpData.cartasList.clear()
                     cartas.forEach{
-                        HttpData.cartasList.add(it.nombre)
+                        cartasList.add(it.nombre)
                     }
                     Log.i("http-klaxon","Error: ${HttpData.cartasList}")
                 }

@@ -124,7 +124,8 @@ class ExpansionActivity : AppCompatActivity() {
 
     fun guardarExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
         val nuevaExpansion = Expansion(nombre, id, releaseDate, precio, tcg)
-        Companion.anadirExpansion(nuevaExpansion)
+        val httpDataExp = HttpDataExp()
+        httpDataExp.createExpansion(nuevaExpansion)
     }
 
     fun loadExpansionData(datos:List<*>){
