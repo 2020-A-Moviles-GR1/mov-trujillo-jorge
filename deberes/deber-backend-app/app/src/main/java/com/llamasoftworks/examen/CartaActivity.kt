@@ -1,6 +1,7 @@
 package com.llamasoftworks.examen
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
@@ -47,7 +48,8 @@ class CartaActivity : AppCompatActivity() {
         super.onStart()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
         if (numeroEncontrado != -1){
-            val datos = Companion.readCard(numeroEncontrado)
+            val datos =httpData.readCard(numeroEncontrado)
+            Log.i("http-klaxon","Error: ${datos}")
             oldName = datos[0].toString()
             loadCardData(datos)
             btn_guardar_carta.setVisibility(View.GONE);
@@ -73,7 +75,6 @@ class CartaActivity : AppCompatActivity() {
     }
 
     fun loadCardData(datos:List<*>){
-        System.out.println( datos[3] as Boolean)
         etEngName.setText((datos[0].toString()))
         etId.setText((datos[1].toString()))
         spin.setSelection(datos[2] as Int)

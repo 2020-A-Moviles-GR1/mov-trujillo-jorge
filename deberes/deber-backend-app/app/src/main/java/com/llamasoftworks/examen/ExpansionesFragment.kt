@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter
 import kotlinx.android.synthetic.main.fragment_expansiones.*
 
 class ExpansionesFragment : Fragment() {
+
     var expNum = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
