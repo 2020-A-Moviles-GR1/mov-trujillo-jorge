@@ -4,24 +4,31 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.Switch
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_expansion.*
+import java.lang.ref.WeakReference
 import java.time.LocalDate
 import java.util.*
 
 class ExpansionActivity : AppCompatActivity() {
 
-    var date: LocalDate = LocalDate.now()
+
     var picker: DatePickerDialog? = null
-    var oldName = ""
+
     var posicion = -1
     var listaCartasOnExp =   mutableListOf<String>()
     var data = LocalDate.now()
-
+    companion object{
+        var date: LocalDate = LocalDate.now()
+        var oldId = ""
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,7 +49,7 @@ class ExpansionActivity : AppCompatActivity() {
             finish()
         }
         fab_deleteEx.setOnClickListener {
-            deleteExpansion(oldName)
+            deleteExpansion(oldId)
             finish()
         }
         fab_add_card_to_Exp.setOnClickListener {
@@ -77,10 +84,8 @@ class ExpansionActivity : AppCompatActivity() {
         super.onStart()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
         if (numeroEncontrado != -1){
-            val datos = Companion.readExpansion(numeroEncontrado)
-            oldName = datos[0].toString()
             posicion = numeroEncontrado
-            loadExpansionData(datos)
+            MyTask(this,numeroEncontrado).execute()
             btn_guardar_cartaEx.setVisibility(View.GONE);
         }else{
             fab_deleteEx.hide()
@@ -111,7 +116,7 @@ class ExpansionActivity : AppCompatActivity() {
                     304 ->{
                         if(data!=null){
                             val posisiondos = data.getIntExtra("indice", -1)
-                            listaCartasOnExp.add(Companion.cartas.keys.toList()[posisiondos])
+                            //listaCartasOnExp.add(Companion.cartas.keys.toList()[posisiondos])
                         }
                     }
                 }
@@ -139,11 +144,11 @@ class ExpansionActivity : AppCompatActivity() {
     }
 
     fun updateExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
-        Companion.updateExpansion(oldName,nombre,id,date,tcg,precio,listaCartasOnExp)
+        //Companion.updateExpansion(oldName,nombre,id,date,tcg,precio,listaCartasOnExp)
     }
 
     fun deleteExpansion(nombre: String){
-        Companion.deleteExpansion(nombre)
+        //Companion.deleteExpansion(nombre)
     }
 
     fun datePicker (){
@@ -170,6 +175,31 @@ class ExpansionActivity : AppCompatActivity() {
         )
         intentExplicito.putExtra("posicion", posicion)
         startActivityForResult(intentExplicito,304)
+    }
+
+    private class MyTask(context: ExpansionActivity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
+        val activityReference: WeakReference<ExpansionActivity?> = WeakReference(context)
+        val posicion = position
+        val etEngNameEx = activityReference.get()?.findViewById<EditText>(R.id.etEngNameEx)
+        val etIdEx = activityReference.get()?.findViewById<EditText>(R.id.etIdEx)
+        val etDateEx = activityReference.get()?.findViewById<EditText>(R.id.editTextDate)
+        val switch1Ex = activityReference.get()?.findViewById<Switch>(R.id.switch1Ex)
+        val editText5Ex = activityReference.get()?.findViewById<EditText>(R.id.editText5Ex)
+        override fun doInBackground(vararg p0:Void): List<*>{
+            val httpDataEx = HttpDataExp()
+
+            return httpDataEx.readExpansion(posicion)
+        }
+
+        override fun onPostExecute(aVoid: List<*>) {
+            date = aVoid[2] as LocalDate
+            etEngNameEx!!.setText(aVoid[0].toString())
+            etIdEx!!.setText(aVoid[1].toString())
+            etDateEx!!.setText(aVoid[2].toString())
+            switch1Ex!!.isChecked = aVoid[4] as Boolean
+            editText5Ex!!.setText(aVoid[3].toString())
+            oldId = aVoid[1].toString()
+        }
     }
 }
 

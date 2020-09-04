@@ -11,7 +11,6 @@ import com.github.kittinunf.result.Result
 class HttpData {
     companion object{
         var cartasList = mutableListOf<String>()
-        var expansionesList = mutableListOf<String>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     fun readCard(posicion:Int):List<*>{

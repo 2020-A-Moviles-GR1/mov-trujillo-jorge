@@ -37,20 +37,19 @@ class HttpDataExp {
     }
 
     fun readExpansionNames(){
-
         val (request, response, result) = "http://192.168.1.3:1337/expansion"
             .httpGet()
             .responseString()
         when(result){
             is Result.Success -> {
                 val data = result.get()
-                val cartas = Klaxon()
+                val expansiones = Klaxon()
                     .fieldConverter(KlaxonDate::class, dateConverter)
                     .parseArray<Expansion>(data)
-                if (cartas != null){
-                    HttpData.expansionesList.clear()
-                    cartas.forEach{
-                        HttpData.expansionesList.add(it.nombre)
+                if (expansiones != null){
+                    expansionesList.clear()
+                    expansiones.forEach{
+                        expansionesList.add(it.nombre)
                     }
                     Log.i("http-klaxon","Error: ${HttpData.cartasList}")
                 }
@@ -85,4 +84,32 @@ class HttpDataExp {
                 }
             }
     }
+
+    fun readExpansion(posicion:Int):List<*>{
+        val nombre = expansionesList[posicion]
+        var listaDeDatosExpansion = mutableListOf("","",0,LocalDate.now(),0.01,true, listOf<String>())
+        val url = urlPrincipal + "/expansion?nombre="+nombre
+        val (request, response, result) = url
+            .httpGet()
+            .responseString()
+        when(result){
+            is Result.Success -> {
+                val data = result.get()
+                val expansion = Klaxon()
+                    .fieldConverter(KlaxonDate::class, dateConverter)
+                    .parseArray<Expansion>(data)
+                if (expansion != null){
+                    Log.i("http-klaxon","Datos: ${expansion[0].nombre}")
+                    listaDeDatosExpansion = mutableListOf(expansion[0].nombre,expansion[0].id,
+                        expansion[0].releaseDate,expansion[0].precio,expansion[0].tcg,expansion[0].cartas)
+                }
+            }
+            is Result.Failure -> {
+                val ex = result.getException()
+                Log.i("http-klaxon","Error: ${ex.cause}")
+            }
+        }
+        return listaDeDatosExpansion
+    }
+
 }

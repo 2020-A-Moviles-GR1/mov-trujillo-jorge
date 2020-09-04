@@ -40,7 +40,7 @@ class ExpansionesFragment : Fragment() {
         super.onStart()
         MyTask(activity).execute()
         var adapter = ArrayAdapter(
-            activity, android.R.layout.simple_list_item_1,HttpData.expansionesList
+            activity, android.R.layout.simple_list_item_1,HttpDataExp.expansionesList
         )
         lv_expanciones.adapter = adapter
         adapter.notifyDataSetChanged()
