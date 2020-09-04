@@ -5,6 +5,7 @@ import com.beust.klaxon.Converter
 import com.beust.klaxon.JsonValue
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.KlaxonException
+import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.fuel.httpPut
@@ -139,4 +140,22 @@ class HttpDataExp {
                 }
             }
     }
+
+    fun deleteExpansion (idExpansion:String){
+        val url = urlPrincipal + "/expansion/"+idExpansion
+        url.httpDelete()
+            .responseString{
+                    req, res, result ->
+                when(result){
+                    is Result.Failure ->{
+                        val error = result.getException()
+                    }
+                    is Result.Success -> {
+                        val usuarioString = result.get()
+                    }
+                }
+            }
+    }
+
+
 }

@@ -24,25 +24,28 @@ class CartasFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        Log.i("http-klaxon","on create ")
         return inflater.inflate(R.layout.fragment_cartas, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.i("http-klaxon","onViwr creayed")
         super.onViewCreated(view, savedInstanceState)
         fab_add_card.setOnClickListener{
             irCartaActivity()
         }
-        Log.i("http-klaxon","OnStart ${HttpData.cartasList} ")
+
     }
 
     override fun onStart() {
         super.onStart()
-        MyTask(activity).execute()
+        Log.i("http-klaxon","Start")
         var adapter = ArrayAdapter(
             activity, android.R.layout.simple_list_item_1,HttpData.cartasList
         )
         lv_cartas.adapter = adapter
         adapter.notifyDataSetChanged()
+        MyTask(activity).execute()
         lv_cartas
             .onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->
@@ -50,6 +53,11 @@ class CartasFragment : Fragment() {
             irCartaActivityEdit()}
     }
 
+    override fun onResume() {
+        super.onResume()
+        Log.i("http-klaxon","Resumr")
+        MyTask(activity).execute()
+    }
 
     fun irCartaActivity(){
         val intentExplicito = Intent(
@@ -76,12 +84,10 @@ class CartasFragment : Fragment() {
             httpData.readCardsNames()
             return null
         }
-
         override fun onPostExecute(aVoid: Void?) {
             var adapter = liV?.adapter as ArrayAdapter<String>
-            if (liV != null) {
-                adapter.notifyDataSetChanged()
-            }
+             adapter.notifyDataSetChanged()
+
         }
     }
 }

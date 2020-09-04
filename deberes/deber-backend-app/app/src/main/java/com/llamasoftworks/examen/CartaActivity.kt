@@ -21,7 +21,6 @@ class CartaActivity : AppCompatActivity() {
     )
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_carta)
         val arrayAdapter = ArrayAdapter<Any?>(
             this.getApplicationContext(),
@@ -43,7 +42,6 @@ class CartaActivity : AppCompatActivity() {
         }
         fab_delete.setOnClickListener {
             deleteCard(oldId)
-            //Companion.deleteCardFromAll(oldName)
             finish()
         }
     }
@@ -81,7 +79,6 @@ class CartaActivity : AppCompatActivity() {
         val editText5 = activityReference.get()?.findViewById<EditText>(R.id.editText5)
         override fun doInBackground(vararg p0:Void): List<*>{
             val httpData = HttpData()
-
             return httpData.readCard(posicion)
         }
 
@@ -92,6 +89,7 @@ class CartaActivity : AppCompatActivity() {
             switch1!!.isChecked = aVoid[3] as Boolean
             editText5!!.setText(aVoid[4].toString())
             oldId = aVoid[1].toString()
+
 
         }
     }

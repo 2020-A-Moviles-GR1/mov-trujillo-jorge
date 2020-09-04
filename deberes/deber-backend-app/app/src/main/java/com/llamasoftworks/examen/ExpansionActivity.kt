@@ -21,7 +21,7 @@ class ExpansionActivity : AppCompatActivity() {
 
 
     var picker: DatePickerDialog? = null
-
+    val httpDataExp = HttpDataExp()
     var posicion = -1
 
     companion object{
@@ -123,8 +123,8 @@ class ExpansionActivity : AppCompatActivity() {
         //Companion.updateExpansion(oldName,nombre,id,date,tcg,precio,listaCartasOnExp)
     }
 
-    fun deleteExpansion(nombre: String){
-        //Companion.deleteExpansion(nombre)
+    fun deleteExpansion(id: String){
+        httpDataExp.deleteExpansion(id)
     }
 
     fun datePicker (){

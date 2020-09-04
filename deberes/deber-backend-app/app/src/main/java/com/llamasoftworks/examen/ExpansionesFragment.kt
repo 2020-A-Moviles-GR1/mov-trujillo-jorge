@@ -32,13 +32,14 @@ class ExpansionesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         fab_add_exp.setOnClickListener {
-            this.irExpActivity()
+            irExpActivity()
         }
+        MyTask(activity).execute()
     }
 
     override fun onStart() {
         super.onStart()
-        MyTask(activity).execute()
+
         var adapter = ArrayAdapter(
             activity, android.R.layout.simple_list_item_1,HttpDataExp.expansionesList
         )
@@ -57,6 +58,11 @@ class ExpansionesFragment : Fragment() {
             ExpansionActivity::class.java
         )
         startActivity(intentExplicito)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MyTask(activity).execute()
     }
 
     fun irExpansionActivityEdit(){
