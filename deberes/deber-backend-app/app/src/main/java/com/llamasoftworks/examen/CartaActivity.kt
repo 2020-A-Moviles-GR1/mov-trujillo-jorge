@@ -2,6 +2,7 @@ package com.llamasoftworks.examen
 
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -91,6 +92,7 @@ class CartaActivity : AppCompatActivity() {
             switch1!!.isChecked = aVoid[3] as Boolean
             editText5!!.setText(aVoid[4].toString())
             oldId = aVoid[1].toString()
+
         }
     }
 

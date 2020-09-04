@@ -68,7 +68,7 @@ class Companion {
                     oldExpansion.releaseDate= releaseDate
                     oldExpansion.tcg= tcg
                     oldExpansion.precio = precio
-                    oldExpansion.cartas = listCartas as MutableList<String>
+                    oldExpansion.cartas = listCartas as MutableList<Carta>
                     val newExpansion= oldExpansion
                     expansiones.remove(oldName)
                     expansiones.put(newName,newExpansion)
@@ -77,7 +77,7 @@ class Companion {
                     oldExpansion.releaseDate= releaseDate
                     oldExpansion.tcg= tcg
                     oldExpansion.precio = precio
-                    oldExpansion.cartas = listCartas as MutableList<String>
+                    oldExpansion.cartas = listCartas as MutableList<Carta>
                 }
             }
         }
@@ -91,21 +91,21 @@ class Companion {
             }
         }
 
-        fun deleteCardFromAll(nombreCarta: String){
-            expansiones.map { it-> if (it.value.cartas.contains(nombreCarta)){
-                it.value.cartas.remove(nombreCarta)
-                updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
-                    it.value.tcg,it.value.precio,it.value.cartas)
-            } }
-        }
+//        fun deleteCardFromAll(nombreCarta: String){
+//            expansiones.map { it-> if (it.value.cartas.contains(nombreCarta)){
+//                it.value.cartas.remove(nombreCarta)
+//                updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
+//                    it.value.tcg,it.value.precio,it.value.cartas)
+//            } }
+//        }
 
-        fun updateCardForAll(oldName: String,newName: String){
-            expansiones.map { it-> if (it.value.cartas.contains(oldName)){
-                it.value.cartas.remove(oldName)
-                it.value.cartas.add(newName)
-                updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
-                    it.value.tcg,it.value.precio,it.value.cartas)
-            } }
-        }
+//        fun updateCardForAll(oldName: String,newName: String){
+//            expansiones.map { it-> if (it.value.cartas.contains(oldName)){
+//                it.value.cartas.remove(oldName)
+//                it.value.cartas.add(newName)
+//                updateExpansion(it.value.nombre,it.key, it.value.id,it.value.releaseDate,
+//                    it.value.tcg,it.value.precio,it.value.cartas)
+//            } }
+//        }
     }
 }

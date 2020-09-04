@@ -31,7 +31,7 @@ module.exports = {
     },
     cartas:{//one to many
       collection:'carta',//referencia al modelo
-      via:'expansion'//nombre foreign key
+      via:'expansions'//nombre foreign key
     }
   },
 

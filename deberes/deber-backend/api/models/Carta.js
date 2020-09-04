@@ -30,9 +30,9 @@ module.exports = {
       type:'boolean',
       required:true
     },
-    expansion: {
-      model:'expansion',
-      required: false
+    expansions: {
+      collection:'expansion',
+      via: 'cartas'
     }
   },
 

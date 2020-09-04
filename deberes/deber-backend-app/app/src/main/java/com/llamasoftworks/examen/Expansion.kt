@@ -8,9 +8,9 @@ class Expansion@JvmOverloads constructor (
     var id:String,
     @KlaxonDate var releaseDate:LocalDate,
     var precio:Double,
-    var tcg:Boolean){
+    var tcg:Boolean, var cartas:MutableList<Carta> = mutableListOf()){
 
-    var cartas:MutableList<String> = mutableListOf()
+
 
 }
 @Target(AnnotationTarget.FIELD)

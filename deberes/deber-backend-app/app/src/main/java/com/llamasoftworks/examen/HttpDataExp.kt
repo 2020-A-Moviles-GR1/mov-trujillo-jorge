@@ -7,11 +7,11 @@ import com.beust.klaxon.Klaxon
 import com.beust.klaxon.KlaxonException
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
+import com.github.kittinunf.fuel.httpPut
 import com.github.kittinunf.result.Result
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.TemporalQueries.localDate
 
 
 
@@ -19,6 +19,7 @@ import java.time.temporal.TemporalQueries.localDate
 class HttpDataExp {
     companion object{
         var expansionesList = mutableListOf<String>()
+        var listaCartasOnExp = mutableListOf<String>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     val dateConverter = object: Converter {
@@ -99,7 +100,7 @@ class HttpDataExp {
                     .fieldConverter(KlaxonDate::class, dateConverter)
                     .parseArray<Expansion>(data)
                 if (expansion != null){
-                    Log.i("http-klaxon","Datos: ${expansion[0].nombre}")
+                    Log.i("http-klaxon","Datos-----------: ${expansion[0].cartas}")
                     listaDeDatosExpansion = mutableListOf(expansion[0].nombre,expansion[0].id,
                         expansion[0].releaseDate,expansion[0].precio,expansion[0].tcg,expansion[0].cartas)
                 }
@@ -112,4 +113,30 @@ class HttpDataExp {
         return listaDeDatosExpansion
     }
 
+    fun updateExpansion(newName: String, id: String,
+                        releaseDate: LocalDate, tcg: Boolean, precio: Double,
+                        listCartas: MutableList<*>){
+        val url = urlPrincipal + "/expansion/"+id
+        val instant: Instant = releaseDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
+        val parametrosCarta = listOf(
+            "nombre" to newName,
+            "id" to id,
+            "releaseDate" to instant.toEpochMilli(),
+            "precio" to precio,
+            "tcg" to tcg,
+            "cartas" to listCartas
+        )
+        url.httpPut(parametrosCarta)
+            .responseString{
+                    req, res, result ->
+                when(result){
+                    is Result.Failure ->{
+                        val error = result.getException()
+                    }
+                    is Result.Success -> {
+                        val usuarioString = result.get()
+                    }
+                }
+            }
+    }
 }

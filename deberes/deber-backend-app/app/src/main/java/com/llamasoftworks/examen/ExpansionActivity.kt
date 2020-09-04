@@ -6,16 +6,16 @@ import android.app.DatePickerDialog.OnDateSetListener
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.Switch
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_expansion.*
 import java.lang.ref.WeakReference
 import java.time.LocalDate
 import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.reflect.typeOf
 
 class ExpansionActivity : AppCompatActivity() {
 
@@ -23,11 +23,11 @@ class ExpansionActivity : AppCompatActivity() {
     var picker: DatePickerDialog? = null
 
     var posicion = -1
-    var listaCartasOnExp =   mutableListOf<String>()
-    var data = LocalDate.now()
+
     companion object{
         var date: LocalDate = LocalDate.now()
         var oldId = ""
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,54 +55,40 @@ class ExpansionActivity : AppCompatActivity() {
         fab_add_card_to_Exp.setOnClickListener {
             irAddCardToExpActivity()
         }
-        val adaptador = ArrayAdapter(
-            this, // Contexto
-            android.R.layout.simple_list_item_1, // Nombre Layout
-            listaCartasOnExp.toList()// Lista
-        )
-        lv_cards_on_expansion.adapter = adaptador
-        lv_cards_on_expansion
-            .onItemClickListener = AdapterView.OnItemClickListener {
-                parent, view, position, id ->
-            deleteCard(adaptador,position)}
+
 
     }
-
-    override fun onRestart() {
-        super.onRestart()
-        val adaptador = ArrayAdapter(
-            this, // Contexto
-            android.R.layout.simple_list_item_1, // Nombre Layout
-            listaCartasOnExp.toList()// Lista
-        )
-        lv_cards_on_expansion.adapter = adaptador
-        adaptador.notifyDataSetChanged()
-    }
-
 
     override fun onStart() {
         super.onStart()
+        val adaptador = ArrayAdapter(
+            this, // Contexto
+            android.R.layout.simple_list_item_1, // Nombre Layout
+            HttpDataExp.listaCartasOnExp// Lista
+        )
+        lv_cards_on_expansion.adapter = adaptador
+        adaptador.notifyDataSetChanged()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
+        posicion = numeroEncontrado
         if (numeroEncontrado != -1){
-            posicion = numeroEncontrado
             MyTask(this,numeroEncontrado).execute()
             btn_guardar_cartaEx.setVisibility(View.GONE);
+            etIdEx.keyListener = null
         }else{
             fab_deleteEx.hide()
             fab_add_card_to_Exp.hide()
             btn_save_changesEx.setVisibility(View.GONE);
         }
-        val adaptador = ArrayAdapter(
-            this, // Contexto
-            android.R.layout.simple_list_item_1, // Nombre Layout
-            listaCartasOnExp.toList()// Lista
-        )
-        lv_cards_on_expansion.adapter = adaptador
-        adaptador.notifyDataSetChanged()
+
+
+        lv_cards_on_expansion
+            .onItemClickListener = AdapterView.OnItemClickListener {
+                parent, view, position, id ->
+            deleteCard(adaptador,position)}
     }
 
     fun deleteCard(adaptador: ArrayAdapter<String>, index:Int){
-        listaCartasOnExp.removeAt(index)
+        HttpDataExp.listaCartasOnExp.removeAt(index)
         adaptador.notifyDataSetChanged()
         recreate()
     }
@@ -131,16 +117,6 @@ class ExpansionActivity : AppCompatActivity() {
         val nuevaExpansion = Expansion(nombre, id, releaseDate, precio, tcg)
         val httpDataExp = HttpDataExp()
         httpDataExp.createExpansion(nuevaExpansion)
-    }
-
-    fun loadExpansionData(datos:List<*>){
-        etEngNameEx.setText((datos[0].toString()))
-        etIdEx.setText((datos[1].toString()))
-        editTextDate.setText(datos[2].toString())
-        editText5Ex.setText((datos[3].toString()))
-        switch1Ex.isChecked = datos[4] as Boolean
-        listaCartasOnExp = datos[5] as MutableList<String>
-        date = datos[2] as LocalDate
     }
 
     fun updateExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
@@ -177,21 +153,33 @@ class ExpansionActivity : AppCompatActivity() {
         startActivityForResult(intentExplicito,304)
     }
 
-    private class MyTask(context: ExpansionActivity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
-        val activityReference: WeakReference<ExpansionActivity?> = WeakReference(context)
+    private class MyTask(context: Activity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
+        val activityReference: WeakReference<Activity?> = WeakReference(context)
         val posicion = position
+        var liV = activityReference.get()?.findViewById<ListView>(R.id.lv_cards_on_expansion)
         val etEngNameEx = activityReference.get()?.findViewById<EditText>(R.id.etEngNameEx)
         val etIdEx = activityReference.get()?.findViewById<EditText>(R.id.etIdEx)
         val etDateEx = activityReference.get()?.findViewById<EditText>(R.id.editTextDate)
         val switch1Ex = activityReference.get()?.findViewById<Switch>(R.id.switch1Ex)
         val editText5Ex = activityReference.get()?.findViewById<EditText>(R.id.editText5Ex)
+
         override fun doInBackground(vararg p0:Void): List<*>{
             val httpDataEx = HttpDataExp()
-
-            return httpDataEx.readExpansion(posicion)
+            val datos = httpDataEx.readExpansion(posicion)
+            HttpDataExp.listaCartasOnExp.clear()
+            (datos[5] as ArrayList<Carta>).forEach {
+                HttpDataExp.listaCartasOnExp.add(it.nombre)
+            }
+            return datos
         }
 
         override fun onPostExecute(aVoid: List<*>) {
+            var adapter = liV?.adapter as ArrayAdapter<String>
+            //Log.i("http-klaxon","Cartas en Exp ${listaCartasOnExp} ")
+
+            if (liV != null) {
+                adapter.notifyDataSetChanged()
+            }
             date = aVoid[2] as LocalDate
             etEngNameEx!!.setText(aVoid[0].toString())
             etIdEx!!.setText(aVoid[1].toString())
@@ -199,6 +187,9 @@ class ExpansionActivity : AppCompatActivity() {
             switch1Ex!!.isChecked = aVoid[4] as Boolean
             editText5Ex!!.setText(aVoid[3].toString())
             oldId = aVoid[1].toString()
+
+
+
         }
     }
 }
