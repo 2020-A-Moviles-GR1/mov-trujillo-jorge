@@ -25,13 +25,13 @@ class HttpData {
                 val data = result.get()
                 val carta = Klaxon().parseArray<Carta>(data)
                 if (carta != null){
-                    Log.i("http-klaxon","Datos: ${carta[0].nombre}")
+                    //Log.i("http-klaxon","Datos: ${carta[0].nombre}")
                     listaDeDatosCarta = mutableListOf(carta[0].nombre,carta[0].id,carta[0].level,carta[0].tcg,carta[0].precio)
                 }
             }
             is Result.Failure -> {
                 val ex = result.getException()
-                Log.i("http-klaxon","Error: ${ex.cause}")
+                //Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
         return listaDeDatosCarta
@@ -60,7 +60,8 @@ class HttpData {
             }
     }
 
-    fun readCardsNames(){
+    fun readCardsNames():ArrayList<String>{
+        var list = arrayListOf<String>()
         val (request, response, result) = "http://192.168.1.3:1337/carta"
             .httpGet()
             .responseString()
@@ -69,11 +70,12 @@ class HttpData {
                 val data = result.get()
                 val cartas = Klaxon().parseArray<Carta>(data)
                 if (cartas != null){
-                    HttpData.cartasList.clear()
+                    cartasList.clear()
                     cartas.forEach{
                         cartasList.add(it.nombre)
+                        list.add(it.nombre)
                     }
-                    Log.i("http-klaxon","Error: ${HttpData.cartasList}")
+                    //Log.i("http-klaxon","Error: ${HttpData.cartasList}")
                 }
             }
             is Result.Failure -> {
@@ -81,6 +83,7 @@ class HttpData {
                 Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
+        return list
     }
 
     fun deleteCard (idCarta:String){
@@ -120,5 +123,29 @@ class HttpData {
                     }
                 }
             }
+    }
+
+    fun getIdByName(posicion:Int):List<*>{
+        val nombre = cartasList[posicion]
+        var listaDeDatosCarta = mutableListOf("","",0,true,0.01)
+        val url = urlPrincipal + "/carta?nombre="+nombre
+        val (request, response, result) = url
+            .httpGet()
+            .responseString()
+        when(result){
+            is Result.Success -> {
+                val data = result.get()
+                val carta = Klaxon().parseArray<Carta>(data)
+                if (carta != null){
+                    //Log.i("http-klaxon","Datos: ${carta[0].nombre}")
+                    listaDeDatosCarta = mutableListOf(carta[0].nombre,carta[0].id,carta[0].level,carta[0].tcg,carta[0].precio)
+                }
+            }
+            is Result.Failure -> {
+                val ex = result.getException()
+                //Log.i("http-klaxon","Error: ${ex.cause}")
+            }
+        }
+        return listaDeDatosCarta
     }
 }

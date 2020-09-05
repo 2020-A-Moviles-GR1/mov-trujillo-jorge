@@ -24,15 +24,17 @@ class ExpansionActivity : AppCompatActivity() {
     val httpDataExp = HttpDataExp()
     var posicion = -1
 
+
     companion object{
         var date: LocalDate = LocalDate.now()
         var oldId = ""
-
+        var posisiondos = -1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_expansion)
+        Log.i("http-klaxon","On create ")
         btn_release_date.setOnClickListener(View.OnClickListener {
             datePicker()
         })
@@ -44,8 +46,8 @@ class ExpansionActivity : AppCompatActivity() {
             finish()
         }
         btn_save_changesEx.setOnClickListener {
-            updateExpansion(etEngNameEx.text.toString(), etIdEx.text.toString(),
-                date,editText5Ex.text.toString().toDouble(),switch1Ex.isChecked)
+            httpDataExp.updateExpansion(etEngNameEx.text.toString(), etIdEx.text.toString(),
+                date,switch1Ex.isChecked,editText5Ex.text.toString().toDouble(), HttpDataExp.idsCartasOnExp as  ArrayList<String>)
             finish()
         }
         fab_deleteEx.setOnClickListener {
@@ -61,16 +63,11 @@ class ExpansionActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        val adaptador = ArrayAdapter(
-            this, // Contexto
-            android.R.layout.simple_list_item_1, // Nombre Layout
-            HttpDataExp.listaCartasOnExp// Lista
-        )
-        lv_cards_on_expansion.adapter = adaptador
-        adaptador.notifyDataSetChanged()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
         posicion = numeroEncontrado
         if (numeroEncontrado != -1){
+            lv_cards_on_expansion.adapter=ArrayAdapter(
+                this,android.R.layout.simple_list_item_1, HttpDataExp.listaCartasOnExp)
             MyTask(this,numeroEncontrado).execute()
             btn_guardar_cartaEx.setVisibility(View.GONE);
             etIdEx.keyListener = null
@@ -79,12 +76,10 @@ class ExpansionActivity : AppCompatActivity() {
             fab_add_card_to_Exp.hide()
             btn_save_changesEx.setVisibility(View.GONE);
         }
-
-
         lv_cards_on_expansion
             .onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->
-            deleteCard(adaptador,position)}
+            deleteCard(lv_cards_on_expansion.adapter as ArrayAdapter<String>,position)}
     }
 
     fun deleteCard(adaptador: ArrayAdapter<String>, index:Int){
@@ -93,16 +88,15 @@ class ExpansionActivity : AppCompatActivity() {
         recreate()
     }
 
-    override fun onActivityResult(requestCode: Int, //NUmero que enviamos
-                                  resultCode: Int, data: Intent?) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when(resultCode){
             Activity.RESULT_OK->{
                 when(requestCode){
                     304 ->{
                         if(data!=null){
-                            val posisiondos = data.getIntExtra("indice", -1)
-                            //listaCartasOnExp.add(Companion.cartas.keys.toList()[posisiondos])
+                            posisiondos = data.getIntExtra("indice", -1)
+                            HttpDataExp.listaCartasOnExp.add(HttpData.cartasList[posisiondos])
                         }
                     }
                 }
@@ -111,6 +105,12 @@ class ExpansionActivity : AppCompatActivity() {
 
             }
         }
+        Log.i("http-klaxon","On start ${HttpDataExp.listaCartasOnExp} ")
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        HttpDataExp.listaCartasOnExp.clear()
     }
 
     fun guardarExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
@@ -120,7 +120,7 @@ class ExpansionActivity : AppCompatActivity() {
     }
 
     fun updateExpansion(nombre:String, id:String, releaseDate: LocalDate,precio:Double,tcg:Boolean){
-        //Companion.updateExpansion(oldName,nombre,id,date,tcg,precio,listaCartasOnExp)
+        httpDataExp.updateExpansion(nombre,id,releaseDate,tcg,precio, arrayListOf(""))
     }
 
     fun deleteExpansion(id: String){
@@ -164,22 +164,23 @@ class ExpansionActivity : AppCompatActivity() {
         val editText5Ex = activityReference.get()?.findViewById<EditText>(R.id.editText5Ex)
 
         override fun doInBackground(vararg p0:Void): List<*>{
-            val httpDataEx = HttpDataExp()
-            val datos = httpDataEx.readExpansion(posicion)
-            HttpDataExp.listaCartasOnExp.clear()
+            val datos = HttpDataExp().readExpansion(posicion)
             (datos[5] as ArrayList<Carta>).forEach {
-                HttpDataExp.listaCartasOnExp.add(it.nombre)
+                if (!HttpDataExp.listaCartasOnExp.contains(it.nombre)){
+                    HttpDataExp.listaCartasOnExp.add(it.nombre)
+                    HttpDataExp.idsCartasOnExp.add(it.id)
+                }
             }
-            return datos
+            var num = ""
+            if(posisiondos != -1){
+                num = HttpData().readCard(posisiondos)[1] as String
+            }
+            return listOf(datos,num)
         }
 
-        override fun onPostExecute(aVoid: List<*>) {
-            var adapter = liV?.adapter as ArrayAdapter<String>
-            //Log.i("http-klaxon","Cartas en Exp ${listaCartasOnExp} ")
-
-            if (liV != null) {
-                adapter.notifyDataSetChanged()
-            }
+        override fun onPostExecute(respuesta: List<*>) {
+            (liV?.adapter as ArrayAdapter<String>).notifyDataSetChanged()
+            val aVoid = respuesta.get(0) as MutableList<*>
             date = aVoid[2] as LocalDate
             etEngNameEx!!.setText(aVoid[0].toString())
             etIdEx!!.setText(aVoid[1].toString())
@@ -187,11 +188,11 @@ class ExpansionActivity : AppCompatActivity() {
             switch1Ex!!.isChecked = aVoid[4] as Boolean
             editText5Ex!!.setText(aVoid[3].toString())
             oldId = aVoid[1].toString()
-
-
+            if (respuesta.get(1)!=""){
+                HttpDataExp.idsCartasOnExp.add(respuesta.get(1) as String)
+            }
 
         }
     }
 }
-
 

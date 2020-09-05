@@ -40,12 +40,11 @@ class CartasFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.i("http-klaxon","Start")
-        var adapter = ArrayAdapter(
+        lv_cartas.adapter= ArrayAdapter(
             activity, android.R.layout.simple_list_item_1,HttpData.cartasList
         )
-        lv_cartas.adapter = adapter
-        adapter.notifyDataSetChanged()
         MyTask(activity).execute()
+        lv_cartas.deferNotifyDataSetChanged()
         lv_cartas
             .onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->
@@ -76,17 +75,17 @@ class CartasFragment : Fragment() {
         startActivity(intentExplicito)
     }
 
-    private class MyTask(context: FragmentActivity?) : AsyncTask<Void, Void?, Void?>() {
+    private class MyTask(context: FragmentActivity?) : AsyncTask<Void, Void?, ArrayList<String>>() {
         val activityReference: WeakReference<FragmentActivity?> = WeakReference(context)
         var liV = activityReference.get()?.findViewById<ListView>(R.id.lv_cartas)
-        override fun doInBackground(vararg p0:Void): Void? {
+        override fun doInBackground(vararg p0:Void): ArrayList<String> {
             val httpData = HttpData()
-            httpData.readCardsNames()
-            return null
+
+            return httpData.readCardsNames()
         }
-        override fun onPostExecute(aVoid: Void?) {
-            var adapter = liV?.adapter as ArrayAdapter<String>
-             adapter.notifyDataSetChanged()
+        override fun onPostExecute(aVoid: ArrayList<String>) {
+            HttpData.cartasList= aVoid
+            (liV!!.adapter as ArrayAdapter<String>).notifyDataSetChanged()
 
         }
     }

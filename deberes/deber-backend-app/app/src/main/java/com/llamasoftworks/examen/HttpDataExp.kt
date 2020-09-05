@@ -21,6 +21,7 @@ class HttpDataExp {
     companion object{
         var expansionesList = mutableListOf<String>()
         var listaCartasOnExp = mutableListOf<String>()
+        var idsCartasOnExp = mutableListOf<String>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     val dateConverter = object: Converter {
@@ -53,12 +54,12 @@ class HttpDataExp {
                     expansiones.forEach{
                         expansionesList.add(it.nombre)
                     }
-                    Log.i("http-klaxon","Error: ${HttpData.cartasList}")
+                    //Log.i("http-klaxon","Error: ${HttpData.cartasList}")
                 }
             }
             is Result.Failure -> {
                 val ex = result.getException()
-                Log.i("http-klaxon","Error: ${ex.cause}")
+                //Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
     }
@@ -101,14 +102,14 @@ class HttpDataExp {
                     .fieldConverter(KlaxonDate::class, dateConverter)
                     .parseArray<Expansion>(data)
                 if (expansion != null){
-                    Log.i("http-klaxon","Datos-----------: ${expansion[0].cartas}")
+                    //Log.i("http-klaxon","Datos-----------: ${expansion[0].cartas}")
                     listaDeDatosExpansion = mutableListOf(expansion[0].nombre,expansion[0].id,
                         expansion[0].releaseDate,expansion[0].precio,expansion[0].tcg,expansion[0].cartas)
                 }
             }
             is Result.Failure -> {
                 val ex = result.getException()
-                Log.i("http-klaxon","Error: ${ex.cause}")
+                //Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
         return listaDeDatosExpansion
@@ -116,23 +117,25 @@ class HttpDataExp {
 
     fun updateExpansion(newName: String, id: String,
                         releaseDate: LocalDate, tcg: Boolean, precio: Double,
-                        listCartas: MutableList<*>){
+                        listCartas: ArrayList<String>){
         val url = urlPrincipal + "/expansion/"+id
         val instant: Instant = releaseDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
         val parametrosCarta = listOf(
             "nombre" to newName,
             "id" to id,
             "releaseDate" to instant.toEpochMilli(),
-            "precio" to precio,
+            "precio" to precio,//,
             "tcg" to tcg,
             "cartas" to listCartas
         )
+        Log.i("http-klaxon","Parametros: ${parametrosCarta}")
         url.httpPut(parametrosCarta)
             .responseString{
                     req, res, result ->
                 when(result){
                     is Result.Failure ->{
                         val error = result.getException()
+                        Log.i("http-klaxon","Error put: ${error}")
                     }
                     is Result.Success -> {
                         val usuarioString = result.get()
