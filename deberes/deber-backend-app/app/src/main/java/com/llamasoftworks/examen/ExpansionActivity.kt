@@ -84,8 +84,8 @@ class ExpansionActivity : AppCompatActivity() {
 
     fun deleteCard(adaptador: ArrayAdapter<String>, index:Int){
         HttpDataExp.listaCartasOnExp.removeAt(index)
+        HttpDataExp.idsCartasOnExp.removeAt(index)
         adaptador.notifyDataSetChanged()
-        recreate()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
