@@ -39,12 +39,6 @@ class ExpansionesFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-
-        var adapter = ArrayAdapter(
-            activity, android.R.layout.simple_list_item_1,HttpDataExp.expansionesList
-        )
-        lv_expanciones.adapter = adapter
-        adapter.notifyDataSetChanged()
         lv_expanciones
             .onItemClickListener = AdapterView.OnItemClickListener {
                 parent, view, position, id ->
@@ -76,6 +70,7 @@ class ExpansionesFragment : Fragment() {
 
     private class MyTask(context: FragmentActivity?) : AsyncTask<Void, Void?, Void?>() {
         val activityReference: WeakReference<FragmentActivity?> = WeakReference(context)
+        val context = context
         var liV = activityReference.get()?.findViewById<ListView>(R.id.lv_expanciones)
         override fun doInBackground(vararg p0:Void): Void? {
             val httpDataExp = HttpDataExp()
@@ -84,10 +79,11 @@ class ExpansionesFragment : Fragment() {
         }
 
         override fun onPostExecute(aVoid: Void?) {
-            var adapter = liV?.adapter as ArrayAdapter<String>
-            if (liV != null) {
-                adapter.notifyDataSetChanged()
-            }
+            var adaptador = ArrayAdapter(
+                context, android.R.layout.simple_list_item_1,HttpDataExp.expansionesList
+            )
+            liV?.adapter = adaptador
+            adaptador.notifyDataSetChanged()
         }
     }
 

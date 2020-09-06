@@ -5,23 +5,17 @@ import com.beust.klaxon.Converter
 import com.beust.klaxon.JsonValue
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.KlaxonException
-import com.github.kittinunf.fuel.httpDelete
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.fuel.httpPut
+import com.github.kittinunf.fuel.*
 import com.github.kittinunf.result.Result
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 
-
-
-
 class HttpDataExp {
     companion object{
         var expansionesList = mutableListOf<String>()
         var listaCartasOnExp = mutableListOf<String>()
-        var idsCartasOnExp = mutableListOf<String>()
+        var idsCartasOnExp = arrayListOf<String>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     val dateConverter = object: Converter {
@@ -54,12 +48,10 @@ class HttpDataExp {
                     expansiones.forEach{
                         expansionesList.add(it.nombre)
                     }
-                    //Log.i("http-klaxon","Error: ${HttpData.cartasList}")
                 }
             }
             is Result.Failure -> {
                 val ex = result.getException()
-                //Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
     }
@@ -118,6 +110,7 @@ class HttpDataExp {
     fun updateExpansion(newName: String, id: String,
                         releaseDate: LocalDate, tcg: Boolean, precio: Double,
                         listCartas: ArrayList<String>){
+
         val url = urlPrincipal + "/expansion/"+id
         val instant: Instant = releaseDate.atStartOfDay(ZoneId.systemDefault()).toInstant()
         val parametrosCarta = listOf(
@@ -128,7 +121,7 @@ class HttpDataExp {
             "tcg" to tcg,
             "cartas" to listCartas
         )
-        Log.i("http-klaxon","Parametros: ${parametrosCarta}")
+        Log.i("http-klaxon","Parametros: ${parametrosCarta} Cartas lenght ${listCartas.size}")
         url.httpPut(parametrosCarta)
             .responseString{
                     req, res, result ->
@@ -136,6 +129,7 @@ class HttpDataExp {
                     is Result.Failure ->{
                         val error = result.getException()
                         Log.i("http-klaxon","Error put: ${error}")
+
                     }
                     is Result.Success -> {
                         val usuarioString = result.get()
@@ -159,6 +153,4 @@ class HttpDataExp {
                 }
             }
     }
-
-
 }

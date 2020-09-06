@@ -40,10 +40,7 @@ class CartaActivity : AppCompatActivity() {
                 switch1.isChecked,editText5.text.toString().toDouble())
             finish()
         }
-        fab_delete.setOnClickListener {
-            deleteCard(oldId)
-            finish()
-        }
+
     }
 
     override fun onStart() {
@@ -57,6 +54,10 @@ class CartaActivity : AppCompatActivity() {
         }else{
             fab_delete.hide()
             btn_save_changes.setVisibility(View.GONE);
+        }
+        fab_delete.setOnClickListener {
+            deleteCard(oldId)
+            finish()
         }
     }
 

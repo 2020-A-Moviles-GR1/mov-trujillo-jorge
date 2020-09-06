@@ -25,13 +25,11 @@ class HttpData {
                 val data = result.get()
                 val carta = Klaxon().parseArray<Carta>(data)
                 if (carta != null){
-                    //Log.i("http-klaxon","Datos: ${carta[0].nombre}")
                     listaDeDatosCarta = mutableListOf(carta[0].nombre,carta[0].id,carta[0].level,carta[0].tcg,carta[0].precio)
                 }
             }
             is Result.Failure -> {
                 val ex = result.getException()
-                //Log.i("http-klaxon","Error: ${ex.cause}")
             }
         }
         return listaDeDatosCarta
@@ -42,7 +40,7 @@ class HttpData {
         val parametrosCarta = listOf(
             "nombre" to carta.nombre,
             "id" to carta.id,
-            "nivel" to carta.level,
+            "level" to carta.level,
             "tcg" to carta.tcg,
             "precio" to carta.precio
         )
@@ -75,7 +73,6 @@ class HttpData {
                         cartasList.add(it.nombre)
                         list.add(it.nombre)
                     }
-                    //Log.i("http-klaxon","Error: ${HttpData.cartasList}")
                 }
             }
             is Result.Failure -> {
@@ -123,29 +120,5 @@ class HttpData {
                     }
                 }
             }
-    }
-
-    fun getIdByName(posicion:Int):List<*>{
-        val nombre = cartasList[posicion]
-        var listaDeDatosCarta = mutableListOf("","",0,true,0.01)
-        val url = urlPrincipal + "/carta?nombre="+nombre
-        val (request, response, result) = url
-            .httpGet()
-            .responseString()
-        when(result){
-            is Result.Success -> {
-                val data = result.get()
-                val carta = Klaxon().parseArray<Carta>(data)
-                if (carta != null){
-                    //Log.i("http-klaxon","Datos: ${carta[0].nombre}")
-                    listaDeDatosCarta = mutableListOf(carta[0].nombre,carta[0].id,carta[0].level,carta[0].tcg,carta[0].precio)
-                }
-            }
-            is Result.Failure -> {
-                val ex = result.getException()
-                //Log.i("http-klaxon","Error: ${ex.cause}")
-            }
-        }
-        return listaDeDatosCarta
     }
 }
