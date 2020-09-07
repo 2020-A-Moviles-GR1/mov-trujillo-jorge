@@ -12,7 +12,7 @@ class UsuarioHttp(
     var correo: String,
     var estadoCivil: String,
     var password: String,
-    var pokemons: ArrayList<PokemonHttp>
+    var pokemons: ArrayList<PokemonHttp>? = null
 ) {
     var fechaCreacion: Date
     var fechaActualizacion: Date
@@ -22,3 +22,4 @@ class UsuarioHttp(
         fechaActualizacion = Date(updatedAt)
     }
 }
+

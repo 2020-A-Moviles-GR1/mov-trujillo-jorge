@@ -3,7 +3,7 @@ package com.llamasoftworks.moviles
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.beust.klaxon.Klaxon
+import com.beust.klaxon.*
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.fuel.httpPost
 import com.github.kittinunf.result.Result
@@ -63,10 +63,10 @@ class HttpActivity : AppCompatActivity() {
         val pokemonInstancia = Klaxon()
             .parse<PokemonHttp>(pokemonString)
         if(pokemonInstancia != null){
-            Log.i("http-klaxon","Nombe: ${pokemonInstancia.nombre} \n Fecha: ${pokemonInstancia.fechaCreacion}")
+            //Log.i("http-klaxon","Nombe: ${pokemonInstancia.nombre} \n Fecha: ${pokemonInstancia.fechaCreacion}")
         }
 
-        val url = urlPrincipal + "/Usuario"
+        val url = urlPrincipal + "/pokemon"
         url.httpGet()
             .responseString{
                 request, response, result ->
@@ -74,26 +74,44 @@ class HttpActivity : AppCompatActivity() {
                     is Result.Success -> {
                         val data = result.get()
                         //Log.i("http-klaxon","Data: ${data}")
-                        val usuarios = Klaxon()
-                            .parseArray<UsuarioHttp>(data)
-                        if (usuarios != null){
-                            usuarios.forEach{
-                                Log.i("http-klaxon","Nombre: ${it.nombre} \n ${it.estadoCivil}")
-                                if(it.pokemons.size>0){
-                                    it.pokemons.forEach {
-                                        Log.i("http-klaxon","Nombre Poke: ${it.nombre}")
-                                    }
+                        val pokemons = Klaxon()
+                            .fieldConverter(KlxnUserHttp::class, toUserConverter)
+                            .parseArray<PokemonHttp>(data)
+                        //Log.i("http-klaxon","Nombreeee: ${pokemons?.get(0)?.nombre} \n")
+                        if (pokemons != null){
+                            pokemons.forEach{
+                                //Log.i("http-klaxon","Nombreeee: ${it.nombre} \n ${it.id}")
+                                if(it.usuario!=null){
+                                    //it.pokemons.forEach {
+                                        Log.i("http-klaxon","\n ID: ${it.id} \n" +
+                                                " Nombre ${it.nombre}\n Nombre Usuario: ${(it.usuario as UsuarioHttp).nombre}")
+                                    //}
                                 }
                             }
-
-
                         }
                     }
                     is Result.Failure -> {
                         val ex = result.getException()
-                        Log.i("http-klaxon","Error: ${ex.message}")
+                        Log.i("http-klaxon","Error lolo: ${ex}")
                     }
                 }
             }
+    }
+
+    val toUserConverter = object: Converter {
+        override fun canConvert(cls: Class<*>)
+                = cls == UsuarioHttp::class.java
+
+        override fun fromJson(jv: JsonValue): Any? =
+            if (jv.int is Int) {
+                jv.int
+            } else if(jv.obj?.get("nombre") is String){
+                Klaxon().parseFromJsonObject<UsuarioHttp>(jv.obj!!)
+            } else {
+                throw KlaxonException("Couldn't parse date: ${jv.obj?.values}")
+            }
+
+        override fun toJson(o: Any)
+                = """ { "usuario" : $o} """.trimMargin()
     }
 }
