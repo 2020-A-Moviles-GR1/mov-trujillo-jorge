@@ -30,6 +30,23 @@ module.exports = {
       type:'boolean',
       required:true
     },
+    url:{
+      type: 'string',
+      required: true,
+    },
+    image_url:{
+      type: 'string',
+      required: true,
+    },
+    precio:{
+      type:'number'
+    },
+    lat:{
+      type:'number'
+    },
+    long:{
+      type:'number'
+    },
     expansions: {
       collection:'expansion',
       via: 'cartas'

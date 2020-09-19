@@ -31,7 +31,8 @@ class CartaActivity : AppCompatActivity() {
         btn_guardar_carta.setOnClickListener {
             guardarCarta(etEngName.text.toString(), etId.text.toString(),
                 spin.getItemAtPosition(spin.getSelectedItemPosition()).toString().toInt() ,
-                switch1.isChecked,editText5.text.toString().toDouble())
+                switch1.isChecked,editText5.text.toString().toDouble(),etURL.text.toString(),
+                etURLImagen.text.toString(),etLat.text.toString().toDouble(),etLong.text.toString().toDouble())
             finish()
         }
         btn_save_changes.setOnClickListener {
@@ -40,16 +41,20 @@ class CartaActivity : AppCompatActivity() {
                 switch1.isChecked,editText5.text.toString().toDouble())
             finish()
         }
-
+        button.setOnClickListener {
+            getDataYugiApi(etEngName.text.toString())
+        }
+        etEngName.setAdapter(ArrayAdapter(this,
+            android.R.layout.simple_dropdown_item_1line,MainActivity.responseList))
     }
 
     override fun onStart() {
         super.onStart()
         val numeroEncontrado = intent.getIntExtra("numero", -1)
-
         if (numeroEncontrado != -1){
-            MyTask(this,numeroEncontrado).execute()
+            tarea(numeroEncontrado)
             btn_guardar_carta.setVisibility(View.GONE);
+            button.setVisibility(View.GONE)
             etId.keyListener = null
         }else{
             fab_delete.hide()
@@ -61,8 +66,8 @@ class CartaActivity : AppCompatActivity() {
         }
     }
 
-    fun guardarCarta(nombre:String, id:String, level:Int,tcg:Boolean,precio:Double){
-        val nuevaCarta = Carta(nombre,id,level,tcg,precio)
+    fun guardarCarta(nombre:String, id:String, level:Int,tcg:Boolean,precio:Double,url:String,image_url:String,lat:Double,long:Double){
+        val nuevaCarta = Carta(nombre,id,level,tcg,precio,url,image_url,lat, long)
         httpData.createCard(nuevaCarta)
     }
 
@@ -70,29 +75,43 @@ class CartaActivity : AppCompatActivity() {
         httpData.deleteCard(nombre)
     }
 
-    private class MyTask(context: CartaActivity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
-        val activityReference: WeakReference<CartaActivity?> = WeakReference(context)
-        val posicion = position
-        val etEngName = activityReference.get()?.findViewById<EditText>(R.id.etEngName)
-        val etId = activityReference.get()?.findViewById<EditText>(R.id.etId)
-        val spinLevel = activityReference.get()?.findViewById<Spinner>(R.id.spin)
-        val switch1 = activityReference.get()?.findViewById<Switch>(R.id.switch1)
-        val editText5 = activityReference.get()?.findViewById<EditText>(R.id.editText5)
-        override fun doInBackground(vararg p0:Void): List<*>{
-            val httpData = HttpData()
-            return httpData.readCard(posicion)
+    fun getDataYugiApi(nombre: String) {
+        class httpGetAsycTask (): AsyncTask<Void, Void, ArrayList<Any>>() {
+            override fun doInBackground(vararg p0: Void?): ArrayList<Any> {
+                return YuGiAPI().readCard(nombre)
+            }
+            override fun onPostExecute(result: ArrayList<Any>?) {
+                super.onPostExecute(result)
+                etId.setText(result?.get(0).toString())
+                spin.setSelection(result?.get(1) as Int)
+                editText5.setText(result?.get(2).toString())
+                etURL.setText(result?.get(3).toString())
+                etURLImagen.setText(result?.get(4).toString())
+            }
         }
-
-        override fun onPostExecute(aVoid: List<*>) {
-            etEngName!!.setText(aVoid[0].toString())
-            etId!!.setText(aVoid[1].toString())
-            spinLevel!!.setSelection(aVoid[2] as Int)
-            switch1!!.isChecked = aVoid[3] as Boolean
-            editText5!!.setText(aVoid[4].toString())
-            oldId = aVoid[1].toString()
-
-
-        }
+        httpGetAsycTask().execute()
     }
 
+    fun tarea(position: Int){
+        class MyTask() : AsyncTask<Void, Void?, List<*>>() {
+            override fun doInBackground(vararg p0:Void): List<*>{
+                val httpData = HttpData()
+                return httpData.readCard(position)
+            }
+
+            override fun onPostExecute(aVoid: List<*>) {
+                etEngName!!.setText(aVoid[0].toString())
+                etId!!.setText(aVoid[1].toString())
+                spin!!.setSelection(aVoid[2] as Int)
+                switch1!!.isChecked = aVoid[3] as Boolean
+                editText5!!.setText(aVoid[4].toString())
+                etURL!!.setText(aVoid[5].toString())
+                etURLImagen!!.setText(aVoid[6].toString())
+                etLat!!.setText(aVoid[7].toString())
+                etLong!!.setText(aVoid[8].toString())
+                oldId = aVoid[1].toString()
+            }
+        }
+        MyTask().execute()
+    }
 }

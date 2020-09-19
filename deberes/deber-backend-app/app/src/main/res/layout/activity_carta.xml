@@ -30,6 +30,12 @@
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <Button
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="OBTENER DATOS" />
+
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/textField2"
             android:layout_width="match_parent"
@@ -73,13 +79,6 @@
                     android:id="@+id/spin"
                     android:layout_width="170dp"
                     android:layout_height="match_parent" />
-
-            </TableRow>
-
-            <TableRow
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
                 <TextView
                     android:id="@+id/textView4"
                     android:layout_width="wrap_content"
@@ -93,35 +92,113 @@
                     android:layout_height="wrap_content"
                     android:text="TCG" />
 
-
             </TableRow>
         </TableLayout>
 
-        <LinearLayout
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldPrecio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Precio"
+            app:endIconMode="clear_text">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/editText5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="text|numberDecimal"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldURL"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL"
+            app:endIconMode="clear_text">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/etURL"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="text|numberDecimal"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textFieldURLImage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="URL Imagen"
+            app:endIconMode="clear_text">
+
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/etURLImagen"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:gravity="start|top"
+                android:inputType="text|numberDecimal"
+                android:maxLines="1" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TableLayout
+            android:id="@+id/tableLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_marginLeft="1dp"
             android:layout_marginTop="1dp"
-            android:orientation="vertical"
+            android:layout_marginEnd="7dp"
+            android:layout_marginRight="7dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tableLayout">
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
 
-            <TextView
-                android:id="@+id/textView5"
+            <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Precio" />
+                android:layout_height="match_parent">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textFieldLat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Latitud"
+                    app:endIconMode="clear_text">
 
-        </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/etLat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="text|numberDecimal"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        <EditText
-            android:id="@+id/editText5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:gravity="start|top"
-            android:inputType="text|numberDecimal" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/textFieldLong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Longitud"
+                    app:endIconMode="clear_text">
+
+                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                        android:id="@+id/etLong"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ems="10"
+                        android:gravity="start|top"
+                        android:inputType="text|numberDecimal"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+            </TableRow>
+        </TableLayout>
 
         <Button
             android:id="@+id/btn_guardar_carta"

@@ -25,7 +25,9 @@ class HttpData {
                 val data = result.get()
                 val carta = Klaxon().parseArray<Carta>(data)
                 if (carta != null){
-                    listaDeDatosCarta = mutableListOf(carta[0].nombre,carta[0].id,carta[0].level,carta[0].tcg,carta[0].precio)
+                    listaDeDatosCarta = mutableListOf(carta[0].nombre,carta[0].id,
+                        carta[0].level,carta[0].tcg,carta[0].precio, carta[0].url,
+                        carta[0].image_url,carta[0].lat,carta[0].long)
                 }
             }
             is Result.Failure -> {
@@ -42,7 +44,11 @@ class HttpData {
             "id" to carta.id,
             "level" to carta.level,
             "tcg" to carta.tcg,
-            "precio" to carta.precio
+            "precio" to carta.precio,
+            "url" to carta.url,
+            "image_url" to carta.image_url,
+            "lat" to carta.lat,
+            "long" to carta.long
         )
         url.httpPost(parametrosCarta)
             .responseString{

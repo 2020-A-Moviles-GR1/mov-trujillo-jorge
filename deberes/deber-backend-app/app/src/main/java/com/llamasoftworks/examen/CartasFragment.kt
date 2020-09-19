@@ -86,9 +86,6 @@ class CartasFragment : Fragment() {
             )
             liV?.adapter = adaptador
             adaptador.notifyDataSetChanged()
-
-
-
         }
     }
 }
