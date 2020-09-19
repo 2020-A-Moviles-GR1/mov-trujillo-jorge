@@ -12,11 +12,13 @@ import android.widget.ArrayAdapter
 import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_cartas.*
 import java.lang.ref.WeakReference
 
 
-class CartasFragment : Fragment() {
+class CartasFragment : Fragment(){
     var cardNum = -1
 
     override fun onCreateView(
@@ -40,18 +42,18 @@ class CartasFragment : Fragment() {
     override fun onStart() {
         super.onStart()
         Log.i("http-klaxon","Start")
-        MyTask(activity).execute()
-        lv_cartas
-            .onItemClickListener = AdapterView.OnItemClickListener {
-                parent, view, position, id ->
-            cardNum = position
-            irCartaActivityEdit()}
+        tarea()
+//        lv_cartas
+//            .onItemClickListener = AdapterView.OnItemClickListener {
+//                parent, view, position, id ->
+//            cardNum = position
+//            irCartaActivityEdit()}
     }
 
     override fun onResume() {
         super.onResume()
         Log.i("http-klaxon","Resumr")
-        MyTask(activity).execute()
+        tarea()
     }
 
     fun irCartaActivity(){
@@ -71,21 +73,40 @@ class CartasFragment : Fragment() {
         startActivity(intentExplicito)
     }
 
-    private class MyTask(context: FragmentActivity?) : AsyncTask<Void, Void?, ArrayList<String>>() {
-        var context = context
-        val activityReference: WeakReference<FragmentActivity?> = WeakReference(context)
-        var liV = activityReference.get()?.findViewById<ListView>(R.id.lv_cartas)
-        override fun doInBackground(vararg p0:Void): ArrayList<String> {
-            val httpData = HttpData()
-            return httpData.readCardsNames()
-        }
-        override fun onPostExecute(aVoid: ArrayList<String>) {
-            HttpData.cartasList= aVoid
-            val adaptador = ArrayAdapter(
-            context, android.R.layout.simple_list_item_1,HttpData.cartasList
-            )
-            liV?.adapter = adaptador
-            adaptador.notifyDataSetChanged()
-        }
+    fun iniciarRecyclerView(
+        list: List<Carta>,
+        activity: FragmentActivity,
+        recyclerView: RecyclerView
+    ){
+        val adaptadorUsuario = RecyclerAdaptador(
+            list,
+            activity,
+            recyclerView
+        )
+        rv_cartas.adapter = adaptadorUsuario
+        rv_cartas.itemAnimator = androidx.recyclerview.widget.DefaultItemAnimator()
+        rv_cartas.layoutManager = LinearLayoutManager(activity)
+        adaptadorUsuario.notifyDataSetChanged()
     }
+
+    fun tarea(){
+        class MyTask(context: FragmentActivity?) : AsyncTask<Void, Void?, ArrayList<Carta>>() {
+            var context = context
+            override fun doInBackground(vararg p0:Void): ArrayList<Carta> {
+                val httpData = HttpData()
+                return httpData.readCardsNames()
+            }
+            override fun onPostExecute(aVoid: ArrayList<Carta>) {
+                HttpData.cartasList= aVoid
+                context?.let {
+                    iniciarRecyclerView(
+                        HttpData.cartasList, it,rv_cartas
+                    )
+                }
+            }
+        }
+        MyTask(this.activity).execute()
+    }
+
+
 }

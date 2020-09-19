@@ -8,6 +8,8 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_carta.*
 import java.lang.ref.WeakReference
+import java.math.RoundingMode
+import kotlin.random.Random
 
 class CartaActivity : AppCompatActivity() {
 
@@ -87,6 +89,13 @@ class CartaActivity : AppCompatActivity() {
                 editText5.setText(result?.get(2).toString())
                 etURL.setText(result?.get(3).toString())
                 etURLImagen.setText(result?.get(4).toString())
+                etLat.setText((Random.nextDouble(-0.418553,0.732330).toBigDecimal().setScale(6, RoundingMode.HALF_EVEN)).toString())
+                etLong.setText(Random.nextDouble(-78.627339,-77.685031).toBigDecimal().setScale(6,RoundingMode.HALF_EVEN).toString())
+
+                //0.732330, -78.627339
+                //0.732330, -77.685031
+                //-0.418553, -78.627339
+                //-0.418553, -77.685031
             }
         }
         httpGetAsycTask().execute()

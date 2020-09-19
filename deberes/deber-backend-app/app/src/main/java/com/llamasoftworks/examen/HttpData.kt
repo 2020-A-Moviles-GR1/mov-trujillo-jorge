@@ -10,7 +10,7 @@ import com.github.kittinunf.result.Result
 
 class HttpData {
     companion object{
-        var cartasList = mutableListOf<String>()
+        var cartasList = arrayListOf<Carta>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     fun readCard(posicion:Int):List<*>{
@@ -64,8 +64,8 @@ class HttpData {
             }
     }
 
-    fun readCardsNames():ArrayList<String>{
-        var list = arrayListOf<String>()
+    fun readCardsNames():ArrayList<Carta>{
+        var list = arrayListOf<Carta>()
         val (request, response, result) = "http://192.168.1.3:1337/carta"
             .httpGet()
             .responseString()
@@ -76,8 +76,8 @@ class HttpData {
                 if (cartas != null){
                     cartasList.clear()
                     cartas.forEach{
-                        cartasList.add(it.nombre)
-                        list.add(it.nombre)
+                        cartasList.add(it)
+                        list.add(it)
                     }
                 }
             }

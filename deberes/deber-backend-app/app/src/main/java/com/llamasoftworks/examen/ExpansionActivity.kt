@@ -98,7 +98,7 @@ class ExpansionActivity : AppCompatActivity() {
                     304 ->{
                         if(data!=null){
                             posisiondos = data.getIntExtra("indice", -1)
-                            HttpDataExp.listaCartasOnExp.add(HttpData.cartasList[posisiondos])
+                            HttpDataExp.listaCartasOnExp.add(HttpData.cartasList[posisiondos].nombre)
                             //Log.i("http-klaxon","On act result ${HttpDataExp.idsCartasOnExp}  POSICION 2 = ${posisiondos}")
                         }
                     }
