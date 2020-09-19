@@ -47,6 +47,11 @@ class MainActivity : AppCompatActivity() {
             .setOnClickListener {
                 abrirReyclerViewActivity()
             }
+
+        btn_mapa
+            .setOnClickListener {
+                irMapa()
+            }
     }
 
     fun enviarIntentConRespuestaPropia(){
@@ -155,6 +160,14 @@ class MainActivity : AppCompatActivity() {
         val intentExplicito = Intent(
             this,
             CicloVida::class.java
+        )
+        startActivity(intentExplicito)
+    }
+
+    fun irMapa(){
+        val intentExplicito = Intent(
+            this,
+            MapsActivity::class.java
         )
         startActivity(intentExplicito)
     }
