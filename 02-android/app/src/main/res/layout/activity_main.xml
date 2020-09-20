@@ -11,7 +11,7 @@
         android:id="@+id/btn_ciclo_vida"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="30dp"
         android:text="CICLO VIDA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.402"
@@ -53,7 +53,7 @@
         android:id="@+id/btn_resp_propia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="36dp"
         android:text="RESP PROPIA"
         app:layout_constraintEnd_toEndOf="@+id/btn_intent_implicito"
         app:layout_constraintHorizontal_bias="1.0"
@@ -64,7 +64,7 @@
         android:id="@+id/btn_http"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="92dp"
         android:text="HTTTP"
         app:layout_constraintEnd_toEndOf="@+id/btn_resp_propia"
         app:layout_constraintHorizontal_bias="0.333"
@@ -80,4 +80,15 @@
         app:layout_constraintEnd_toEndOf="@+id/btn_http"
         app:layout_constraintStart_toStartOf="@+id/btn_http"
         app:layout_constraintTop_toBottomOf="@+id/btn_http" />
+
+    <Button
+        android:id="@+id/btn_mapa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Mapa"
+        app:layout_constraintEnd_toEndOf="@+id/btn_recycler"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/btn_recycler"
+        app:layout_constraintTop_toBottomOf="@+id/btn_recycler" />
 </androidx.constraintlayout.widget.ConstraintLayout>

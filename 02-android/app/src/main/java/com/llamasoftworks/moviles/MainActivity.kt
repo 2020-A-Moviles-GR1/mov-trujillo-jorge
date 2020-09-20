@@ -42,6 +42,16 @@ class MainActivity : AppCompatActivity() {
         btn_http.setOnClickListener {
             abrirActividadHttp()
         }
+
+        btn_recycler
+            .setOnClickListener {
+                abrirReyclerViewActivity()
+            }
+
+        btn_mapa
+            .setOnClickListener {
+                irMapa()
+            }
     }
 
     fun enviarIntentConRespuestaPropia(){
@@ -138,10 +148,26 @@ class MainActivity : AppCompatActivity() {
         startActivity(intentExplicito)
     }
 
+    fun abrirReyclerViewActivity(){
+        val intentExplicito = Intent(
+            this,
+            RecyclerViewActivity::class.java
+        )
+        startActivity(intentExplicito)
+    }
+
     fun irCicloDeVida(){
         val intentExplicito = Intent(
             this,
             CicloVida::class.java
+        )
+        startActivity(intentExplicito)
+    }
+
+    fun irMapa(){
+        val intentExplicito = Intent(
+            this,
+            MapsActivity::class.java
         )
         startActivity(intentExplicito)
     }

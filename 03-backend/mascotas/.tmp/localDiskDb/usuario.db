@@ -6,4 +6,4 @@
 {"createdAt":1597926826677,"updatedAt":1597926826677,"id":5,"nombre":"Lans","correo":"lans@example.com","estadoCivil":"Divorciado","password":"LansPoke3","usr_cedula":"1129481838","_id":5}
 {"createdAt":1597926880281,"updatedAt":1597926880281,"id":6,"nombre":"McFarlane","correo":"mcfarlane@example.com","estadoCivil":"Viudo","password":"McFarlane22","usr_cedula":"0493818394","_id":6}
 {"createdAt":1597926952552,"updatedAt":1597926952552,"id":7,"nombre":"Alana","correo":"alana@example.com","estadoCivil":"Union Libre","password":"AlanaPoke22","usr_cedula":"1234641824","_id":7}
-{"nombre":"Ain","correo":"ain@example.com","estadoCivil":"Casado","password":"SuperSeg22","createdAt":1598879042409,"updatedAt":1598879042409,"id":12,"usr_cedula":"0401864275","_id":12}
+{"createdAt":1598879042409,"updatedAt":1598879042409,"id":12,"nombre":"Ain","correo":"ain@example.com","estadoCivil":"Casado","password":"SuperSeg22","usr_cedula":"0401864275","_id":12}
