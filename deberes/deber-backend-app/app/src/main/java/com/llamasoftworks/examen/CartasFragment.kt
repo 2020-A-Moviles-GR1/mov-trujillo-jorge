@@ -7,19 +7,18 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.ListView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_cartas.*
-import java.lang.ref.WeakReference
 
 
 class CartasFragment : Fragment(){
-    var cardNum = -1
+    companion object{
+        var cardNum = -1
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -43,11 +42,6 @@ class CartasFragment : Fragment(){
         super.onStart()
         Log.i("http-klaxon","Start")
         tarea()
-//        lv_cartas
-//            .onItemClickListener = AdapterView.OnItemClickListener {
-//                parent, view, position, id ->
-//            cardNum = position
-//            irCartaActivityEdit()}
     }
 
     override fun onResume() {
@@ -61,15 +55,6 @@ class CartasFragment : Fragment(){
             activity,
             CartaActivity::class.java
         )
-        startActivity(intentExplicito)
-    }
-
-    fun irCartaActivityEdit(){
-        val intentExplicito = Intent(
-            activity,
-            CartaActivity::class.java
-        )
-        intentExplicito.putExtra("numero", cardNum)
         startActivity(intentExplicito)
     }
 

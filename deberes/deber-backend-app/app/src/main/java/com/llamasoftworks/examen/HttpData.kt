@@ -14,7 +14,7 @@ class HttpData {
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     fun readCard(posicion:Int):List<*>{
-        val nombre = cartasList[posicion]
+        val nombre = cartasList.get(posicion).nombre
         var listaDeDatosCarta = mutableListOf("","",0,true,0.01)
         val url = urlPrincipal + "/carta?nombre="+nombre
         val (request, response, result) = url

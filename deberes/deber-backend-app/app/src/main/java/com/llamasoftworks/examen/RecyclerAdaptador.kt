@@ -1,8 +1,10 @@
 package com.llamasoftworks.examen
 
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,7 +17,7 @@ import java.net.URL
 
 class RecyclerAdaptador(
     private val listaUsuarios: List<Carta>,
-    private val conexto:FragmentActivity,
+    private var conexto:FragmentActivity,
     private val recyclerView:RecyclerView
 ) : RecyclerView.Adapter<RecyclerAdaptador.MyViewHolder>(){
     inner class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
@@ -24,12 +26,27 @@ class RecyclerAdaptador(
         var imageView: ImageView
         var priceTextView:TextView
         var tcgTextView:TextView
+        val editBtn:TextView
         init{
             nombreTextView = view.findViewById(R.id.tv_card_name_fr)
             idTextView = view.findViewById(R.id.tv_card_id_fr)
             imageView = view.findViewById(R.id.imageView)
             priceTextView = view.findViewById(R.id.tv_precio)
             tcgTextView = view.findViewById(R.id.tv_tcg)
+            editBtn = view.findViewById(R.id.tv_editar)
+            editBtn.setOnClickListener{
+                CartasFragment.cardNum = this.adapterPosition
+                conexto.startActivity(irCartaActivityEdit())
+            }
+        }
+
+        fun irCartaActivityEdit():Intent{
+            val intentExplicito = Intent(
+                conexto,
+                CartaActivity::class.java
+            )
+            intentExplicito.putExtra("numero", CartasFragment.cardNum)
+            return intentExplicito
         }
     }
 
@@ -48,6 +65,8 @@ class RecyclerAdaptador(
     override fun getItemCount(): Int {
         return  listaUsuarios.size
     }
+
+
 
     //una funcion que se ejecuta con cada uno de los items
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
