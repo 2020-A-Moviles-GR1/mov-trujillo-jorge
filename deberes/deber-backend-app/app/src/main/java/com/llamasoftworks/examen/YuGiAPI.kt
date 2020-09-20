@@ -1,13 +1,11 @@
 package com.llamasoftworks.examen
 
-import android.os.AsyncTask
 import android.util.Log
 import com.github.kittinunf.fuel.httpGet
 import com.github.kittinunf.result.Result
 import org.json.JSONArray
 import org.json.JSONObject
 import java.net.URLEncoder
-
 
 class YuGiAPI {
 

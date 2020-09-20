@@ -19,7 +19,6 @@ class CartasFragment : Fragment(){
         var cardNum = -1
     }
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,7 +34,6 @@ class CartasFragment : Fragment(){
         fab_add_card.setOnClickListener{
             irCartaActivity()
         }
-
     }
 
     override fun onStart() {
@@ -75,23 +73,19 @@ class CartasFragment : Fragment(){
     }
 
     fun tarea(){
-        class MyTask(context: FragmentActivity?) : AsyncTask<Void, Void?, ArrayList<Carta>>() {
-            var context = context
-            override fun doInBackground(vararg p0:Void): ArrayList<Carta> {
-                val httpData = HttpData()
-                return httpData.readCardsNames()
+        class MyTask() : AsyncTask<Void, Void?, Void?>() {
+            override fun doInBackground(vararg p0:Void): Void? {
+                HttpData().readCardsNames()
+                return null
             }
-            override fun onPostExecute(aVoid: ArrayList<Carta>) {
-                HttpData.cartasList= aVoid
-                context?.let {
+            override fun onPostExecute(result: Void?) {
+                activity?.let {
                     iniciarRecyclerView(
                         HttpData.cartasList, it,rv_cartas
                     )
                 }
             }
         }
-        MyTask(this.activity).execute()
+        MyTask().execute()
     }
-
-
 }

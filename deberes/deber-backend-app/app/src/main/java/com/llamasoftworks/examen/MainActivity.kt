@@ -25,11 +25,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun getAllCardNames(): List<String>? {
-        var reader: JSONArray? = null
         var responseList: MutableList<String> = ArrayList()
         try {
-            reader = JSONArray(readJSONFromAsset())
-            System.out.println(reader)
+            var reader = JSONArray(readJSONFromAsset())
             for (i in 0 until reader!!.length()) {
                 val e = reader.getJSONObject(i)
                 val name = e.getString("name")

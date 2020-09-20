@@ -63,7 +63,6 @@ class RecyclerAdaptador(
             intentExplicito.putExtra("numero", CartasFragment.cardNum)
             return intentExplicito
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
