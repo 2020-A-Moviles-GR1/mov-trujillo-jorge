@@ -4,10 +4,10 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.AsyncTask
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.fragment.app.FragmentActivity
@@ -27,6 +27,7 @@ class RecyclerAdaptador(
         var priceTextView:TextView
         var tcgTextView:TextView
         val editBtn:TextView
+        val btnMap:Button
         init{
             nombreTextView = view.findViewById(R.id.tv_card_name_fr)
             idTextView = view.findViewById(R.id.tv_card_id_fr)
@@ -34,10 +35,24 @@ class RecyclerAdaptador(
             priceTextView = view.findViewById(R.id.tv_precio)
             tcgTextView = view.findViewById(R.id.tv_tcg)
             editBtn = view.findViewById(R.id.tv_editar)
+            btnMap = view.findViewById(R.id.btn_map_card)
             editBtn.setOnClickListener{
                 CartasFragment.cardNum = this.adapterPosition
                 conexto.startActivity(irCartaActivityEdit())
             }
+            btnMap.setOnClickListener {
+                CartasFragment.cardNum = this.adapterPosition
+                conexto.startActivity(irMapaActivity())
+            }
+        }
+
+        fun irMapaActivity():Intent{
+            val intentExplicito = Intent(
+                conexto,
+                MapsActivity::class.java
+            )
+            intentExplicito.putExtra("carta", CartasFragment.cardNum)
+            return intentExplicito
         }
 
         fun irCartaActivityEdit():Intent{
@@ -48,6 +63,7 @@ class RecyclerAdaptador(
             intentExplicito.putExtra("numero", CartasFragment.cardNum)
             return intentExplicito
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
@@ -65,8 +81,6 @@ class RecyclerAdaptador(
     override fun getItemCount(): Int {
         return  listaUsuarios.size
     }
-
-
 
     //una funcion que se ejecuta con cada uno de los items
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {

@@ -2,12 +2,10 @@ package com.llamasoftworks.examen
 
 import android.os.AsyncTask
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_carta.*
-import java.lang.ref.WeakReference
 import java.math.RoundingMode
 import kotlin.random.Random
 
