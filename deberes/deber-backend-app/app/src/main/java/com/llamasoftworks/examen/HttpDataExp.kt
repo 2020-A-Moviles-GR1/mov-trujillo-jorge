@@ -13,9 +13,10 @@ import java.time.ZoneId
 
 class HttpDataExp {
     companion object{
-        var expansionesList = mutableListOf<String>()
-        var listaCartasOnExp = mutableListOf<String>()
+        var expansionesList = arrayListOf<Expansion>()
+        var listaNombresCartasOnExp = mutableListOf<String>()
         var idsCartasOnExp = arrayListOf<String>()
+        var cartasOnExp = arrayListOf<Carta>()
     }
     var urlPrincipal = "http://192.168.1.3:1337"
     val dateConverter = object: Converter {
@@ -45,8 +46,9 @@ class HttpDataExp {
                     .parseArray<Expansion>(data)
                 if (expansiones != null){
                     expansionesList.clear()
+                    listaNombresCartasOnExp.clear()
                     expansiones.forEach{
-                        expansionesList.add(it.nombre)
+                        expansionesList.add(it)
                     }
                 }
             }
@@ -81,7 +83,7 @@ class HttpDataExp {
     }
 
     fun readExpansion(posicion:Int):List<*>{
-        val nombre = expansionesList[posicion]
+        val nombre = expansionesList[posicion].nombre
         var listaDeDatosExpansion = mutableListOf("","",0,LocalDate.now(),0.01,true, listOf<String>())
         val url = urlPrincipal + "/expansion?nombre="+nombre
         val (request, response, result) = url
@@ -94,7 +96,7 @@ class HttpDataExp {
                     .fieldConverter(KlaxonDate::class, dateConverter)
                     .parseArray<Expansion>(data)
                 if (expansion != null){
-                    //Log.i("http-klaxon","Datos-----------: ${expansion[0].cartas}")
+                    Log.i("http-klaxon","Datos-----------: ${expansion[0].cartas}")
                     listaDeDatosExpansion = mutableListOf(expansion[0].nombre,expansion[0].id,
                         expansion[0].releaseDate,expansion[0].precio,expansion[0].tcg,expansion[0].cartas)
                 }

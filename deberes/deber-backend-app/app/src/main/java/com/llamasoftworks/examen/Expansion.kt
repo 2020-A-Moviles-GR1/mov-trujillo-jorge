@@ -8,6 +8,9 @@ class Expansion@JvmOverloads constructor (
     @KlaxonDate var releaseDate:LocalDate,
     var precio:Double,
     var tcg:Boolean, var cartas:MutableList<Carta> = mutableListOf()){
+    override fun toString(): String {
+        return "Nombre: "+ nombre + "\nID: "+id;
+    }
 }
 @Target(AnnotationTarget.FIELD)
 annotation class KlaxonDate

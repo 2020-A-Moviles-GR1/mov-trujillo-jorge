@@ -11,19 +11,14 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_expansion.*
-import java.lang.ref.WeakReference
 import java.time.LocalDate
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.reflect.typeOf
 
 class ExpansionActivity : AppCompatActivity() {
-
-
     var picker: DatePickerDialog? = null
     val httpDataExp = HttpDataExp()
     var posicion = -1
-
 
     companion object{
         var date: LocalDate = LocalDate.now()
@@ -58,15 +53,17 @@ class ExpansionActivity : AppCompatActivity() {
         fab_add_card_to_Exp.setOnClickListener {
             irAddCardToExpActivity()
         }
+        btn_view_map.setOnClickListener {
+            irMapActivity()
+        }
     }
 
     override fun onStart() {
         super.onStart()
         Log.i("http-klaxon","On start exp act ${HttpDataExp.idsCartasOnExp} ")
-        val numeroEncontrado = intent.getIntExtra("numero", -1)
-        posicion = numeroEncontrado
-        if (numeroEncontrado != -1){
-            MyTask(this,numeroEncontrado).execute()
+        posicion = intent.getIntExtra("numero", -1)
+        if (posicion != -1){
+            tarea()
             btn_guardar_cartaEx.setVisibility(View.GONE);
             etIdEx.keyListener = null
             lv_cards_on_expansion
@@ -77,6 +74,7 @@ class ExpansionActivity : AppCompatActivity() {
             fab_deleteEx.hide()
             fab_add_card_to_Exp.hide()
             btn_save_changesEx.setVisibility(View.GONE);
+            btn_view_map.setVisibility(View.GONE);
         }
 
         Log.i("http-klaxon","On start exp act 2 ${HttpDataExp.idsCartasOnExp} ")
@@ -85,7 +83,8 @@ class ExpansionActivity : AppCompatActivity() {
     fun deleteCard(adaptador: ArrayAdapter<String>, index:Int){
         Log.i("http-klaxon","IDS CARTAS: ${ HttpDataExp.idsCartasOnExp} e INDEX ${index}")
             HttpDataExp.idsCartasOnExp.removeAt(index)
-            HttpDataExp.listaCartasOnExp.removeAt(index)
+            HttpDataExp.listaNombresCartasOnExp.removeAt(index)
+            HttpDataExp.cartasOnExp.removeAt(index)
         Log.i("http-klaxon","IDS CARTAS @: ${ HttpDataExp.idsCartasOnExp}")
         adaptador.notifyDataSetChanged()
     }
@@ -98,8 +97,8 @@ class ExpansionActivity : AppCompatActivity() {
                     304 ->{
                         if(data!=null){
                             posisiondos = data.getIntExtra("indice", -1)
-                            HttpDataExp.listaCartasOnExp.add(HttpData.cartasList[posisiondos].nombre)
-                            //Log.i("http-klaxon","On act result ${HttpDataExp.idsCartasOnExp}  POSICION 2 = ${posisiondos}")
+                            HttpDataExp.listaNombresCartasOnExp.add(HttpData.cartasList[posisiondos].nombre)
+                            HttpDataExp.cartasOnExp.add(HttpData.cartasList[posisiondos])
                         }
                     }
                 }
@@ -108,12 +107,12 @@ class ExpansionActivity : AppCompatActivity() {
 
             }
         }
-
     }
 
     override fun onBackPressed() {
         super.onBackPressed()
-        HttpDataExp.listaCartasOnExp.clear()
+        HttpDataExp.listaNombresCartasOnExp.clear()
+        HttpDataExp.cartasOnExp.clear()
         HttpDataExp.idsCartasOnExp.clear()
         posisiondos = -1
         posicion = -1
@@ -156,56 +155,56 @@ class ExpansionActivity : AppCompatActivity() {
         startActivityForResult(intentExplicito,304)
     }
 
-    private class MyTask(val context: Activity?,position: Int) : AsyncTask<Void, Void?, List<*>>() {
-        val activityReference: WeakReference<Activity?> = WeakReference(context)
-        val posicion = position
-        var liV = activityReference.get()?.findViewById<ListView>(R.id.lv_cards_on_expansion)
-        val etEngNameEx = activityReference.get()?.findViewById<EditText>(R.id.etEngNameEx)
-        val etIdEx = activityReference.get()?.findViewById<EditText>(R.id.etIdEx)
-        val etDateEx = activityReference.get()?.findViewById<EditText>(R.id.editTextDate)
-        val switch1Ex = activityReference.get()?.findViewById<Switch>(R.id.switch1Ex)
-        val editText5Ex = activityReference.get()?.findViewById<EditText>(R.id.editText5Ex)
-
-        override fun doInBackground(vararg p0:Void): List<*>{
-            val datos = HttpDataExp().readExpansion(posicion)
-            Log.i("http-klaxon","On baccground ${HttpDataExp.idsCartasOnExp} ==---${HttpDataExp.expansionesList}")
-            (datos[5] as ArrayList<Carta>).forEach {
-                if (!HttpDataExp.listaCartasOnExp.contains(it.nombre)){
-                    HttpDataExp.listaCartasOnExp.add(it.nombre)
-
-                }
-                if(!HttpDataExp.idsCartasOnExp.contains(it.id)){
-                    HttpDataExp.idsCartasOnExp.add(it.id)
-                }
-                Log.i("http-klaxon","On background 2 ${HttpDataExp.idsCartasOnExp} ==---${HttpDataExp.expansionesList} ")
-            }
-            var num = ""
-            Log.i("http-klaxon","On back posisiondos ${posisiondos} ")
-            if(posisiondos != -1){
-                num = HttpData().readCard(posisiondos)[1] as String
-                Log.i("http-klaxon","On back  ${posisiondos} ")
-            }
-            return listOf(datos,num)
-        }
-
-        override fun onPostExecute(respuesta: List<*>) {
-            val ad =ArrayAdapter(
-                context,android.R.layout.simple_list_item_1, HttpDataExp.listaCartasOnExp)
-             liV?.adapter  = ad
-            (liV?.adapter as ArrayAdapter<String>).notifyDataSetChanged()
-            val aVoid = respuesta.get(0) as MutableList<*>
-            date = aVoid[2] as LocalDate
-            etEngNameEx!!.setText(aVoid[0].toString())
-            etIdEx!!.setText(aVoid[1].toString())
-            etDateEx!!.setText(aVoid[2].toString())
-            switch1Ex!!.isChecked = aVoid[4] as Boolean
-            editText5Ex!!.setText(aVoid[3].toString())
-            oldId = aVoid[1].toString()
-            if (respuesta.get(1)!=""&& !HttpDataExp.idsCartasOnExp.contains(respuesta.get(0))){
-                HttpDataExp.idsCartasOnExp.add(respuesta.get(1) as String)
-            }
-
-        }
+    fun irMapActivity(){
+        val intentExplicito = Intent(
+            this,
+            MapsActivity::class.java
+        )
+        intentExplicito.putExtra("expansion",posicion)
+        startActivity(intentExplicito)
     }
+
+    fun tarea(){
+        class MyTask() : AsyncTask<Void, Void?, List<*>>() {
+            override fun doInBackground(vararg p0:Void): List<*>{
+                val datos = HttpDataExp().readExpansion(posicion)
+                (datos[5] as ArrayList<Carta>).forEach {
+                    if (!HttpDataExp.listaNombresCartasOnExp.contains(it.nombre)){
+                        HttpDataExp.listaNombresCartasOnExp.add(it.nombre)
+                    }
+                    if(!HttpDataExp.idsCartasOnExp.contains(it.id)){
+                        HttpDataExp.idsCartasOnExp.add(it.id)
+                        HttpDataExp.cartasOnExp.add(it)
+                    }
+                }
+                var num = ""
+                if(posisiondos != -1){
+                    num = HttpData().readCard(posisiondos)[1] as String
+                    Log.i("http-klaxon","On back  ${posisiondos} ")
+                }
+                return listOf(datos,num)
+            }
+
+            override fun onPostExecute(respuesta: List<*>) {
+                val ad =ArrayAdapter(
+                    applicationContext,android.R.layout.simple_list_item_1, HttpDataExp.listaNombresCartasOnExp)
+                lv_cards_on_expansion.adapter  = ad
+                (lv_cards_on_expansion.adapter as ArrayAdapter<String>).notifyDataSetChanged()
+                val aVoid = respuesta.get(0) as MutableList<*>
+                date = aVoid[2] as LocalDate
+                etEngNameEx!!.setText(aVoid[0].toString())
+                etIdEx!!.setText(aVoid[1].toString())
+                editTextDate!!.setText(aVoid[2].toString())
+                switch1Ex!!.isChecked = aVoid[4] as Boolean
+                editText5Ex!!.setText(aVoid[3].toString())
+                oldId = aVoid[1].toString()
+                if (respuesta.get(1)!=""&& !HttpDataExp.idsCartasOnExp.contains(respuesta.get(0))){
+                    HttpDataExp.idsCartasOnExp.add(respuesta.get(1) as String)
+                }
+            }
+        }
+        MyTask().execute()
+    }
+
 }
 

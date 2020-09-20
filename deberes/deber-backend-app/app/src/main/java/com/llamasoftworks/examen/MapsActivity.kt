@@ -9,16 +9,12 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Marker
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import java.net.URL
 
 
@@ -29,28 +25,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
     private var url = ""
     private var nombre = ""
     private var image_url = ""
-    lateinit var  bmp: Bitmap
-    var tienePermisos = false
+    var expansion = -1
     override fun onStart() {
         super.onStart()
         val policy =
             StrictMode.ThreadPolicy.Builder().permitAll().build()
         StrictMode.setThreadPolicy(policy)
         val numeroEncontrado = intent.getIntExtra("carta", -1)
-        val carta = HttpData.cartasList[numeroEncontrado]
-        latlong = LatLng(carta.lat,carta.long)
-        url = carta.url
-        image_url = carta.image_url
-        nombre = carta.nombre
-        bmp = BitmapFactory.decodeStream(URL(image_url).openConnection().getInputStream())
-        bmp = Bitmap.createScaledBitmap(bmp, 140, 204, false)
+        expansion = intent.getIntExtra("expansion", -1)
+        if (numeroEncontrado!=-1){
+            val carta = HttpData.cartasList[numeroEncontrado]
+            latlong = LatLng(carta.lat,carta.long)
+            url = carta.url
+            image_url = carta.image_url
+            nombre = carta.nombre
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_maps)
-        solicitarPermisos()
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -60,12 +54,23 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         mMap = googleMap
         establecerConfiguracionMapa(mMap)
         establecerListeners(mMap)
-        moverCamaraZoom(latlong,17f)
-        // Add a marker in Sydney and move the camera
+        //moverCamaraZoom(latlong,17f)
 
-        val sydney = latlong
-        mMap.addMarker(MarkerOptions().position(sydney).icon(BitmapDescriptorFactory.fromBitmap(bmp)).title(nombre).snippet(url))
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        if (url!=""){
+            val sydney = latlong
+            mMap.addMarker(MarkerOptions().position(sydney).icon(getBitmap(image_url)).title(nombre).snippet(url))
+            mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+        }else{
+            HttpDataExp.cartasOnExp.forEach{
+                mMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(it.lat,it.long))
+                        .icon(getBitmap(it.image_url))
+                        .title(it.nombre)
+                        .snippet(it.url)
+                )
+            }
+        }
     }
 
     override fun onInfoWindowClick(p0: Marker?) {
@@ -79,11 +84,10 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
         }
     }
 
-    fun moverCamaraZoom(latLng: LatLng,zoom:Float = 10f){
-        mMap.moveCamera(
-            CameraUpdateFactory
-                .newLatLngZoom(latLng,zoom)
-        )
+    fun getBitmap(url:String): BitmapDescriptor {
+        var bmp = BitmapFactory.decodeStream(URL(url).openConnection().getInputStream())
+        bmp = Bitmap.createScaledBitmap(bmp, 140, 204, false)
+         return BitmapDescriptorFactory.fromBitmap(bmp)
     }
 
     fun establecerConfiguracionMapa(mapa:GoogleMap){
@@ -101,29 +105,5 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnInfoWi
             uiSettings.isZoomControlsEnabled = true
             uiSettings.isMyLocationButtonEnabled = true
         }
-
     }
-
-    fun solicitarPermisos(){
-        val permisosFineLocation = ContextCompat
-            .checkSelfPermission(
-                this.applicationContext,
-                android.Manifest.permission.ACCESS_FINE_LOCATION
-            )
-        val tienePermisos = permisosFineLocation == PackageManager.PERMISSION_GRANTED
-        if(tienePermisos){
-            Log.i("maps","Tiene permisos FINE Location")
-            this.tienePermisos = true
-        }else{
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    android.Manifest.permission.ACCESS_FINE_LOCATION
-                ),
-                1
-            )
-        }
-    }
-
-
 }
